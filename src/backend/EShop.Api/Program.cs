@@ -1,3 +1,5 @@
+
+using EShop.Api.DI;
 using EShop.Modules.Identity.DI;
 using EShop.Shared.Endpoint;
 using JasperFx.CodeGeneration.Model;
@@ -13,8 +15,9 @@ builder.Host.UseWolverine(opt =>
         typeof(IdentityModuleMarker).Assembly);
 });
 
-var app = builder.Build();
+builder.Services.AddConfiguration(builder.Configuration);
 
+var app = builder.Build();
 
 app.MapEndpoints();
 

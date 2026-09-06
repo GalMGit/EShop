@@ -14,7 +14,7 @@ public sealed class TestEndpoint : IEndpoint
                 IMessageBus query) =>
             {
                 var result = await query.InvokeAsync<TestResponse>(
-                    new TestCommand());
+                    new TestQuery());
 
                 return result;
             })

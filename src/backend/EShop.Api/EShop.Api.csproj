@@ -3,11 +3,19 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8"/>
+        <PackageReference Include="Scalar.AspNetCore" Version="2.17.2" />
+        <PackageReference Include="WolverineFx" Version="6.33.0" />
+        <PackageReference Include="WolverineFx.RuntimeCompilation" Version="6.33.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\modules\EShop.Modules.Identity\EShop.Modules.Identity.csproj" />
     </ItemGroup>
 
 </Project>

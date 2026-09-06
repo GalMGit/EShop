@@ -6,9 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Infrastructure\Persistence\Configs\" />
-      <Folder Include="Infrastructure\Persistence\Context\" />
-    </ItemGroup>
-
 </Project>

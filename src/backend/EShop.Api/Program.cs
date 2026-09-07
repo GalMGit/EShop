@@ -3,6 +3,7 @@ using Modules.Identity.DI;
 using EShop.Shared.Endpoint;
 using JasperFx.CodeGeneration.Model;
 using Microsoft.EntityFrameworkCore;
+using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Scalar.AspNetCore;
 using Wolverine;
@@ -26,6 +27,7 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<IdentityDbContext>();
 
     await db.Database.MigrateAsync();
+    await IdentitySeeder.SeedAsync(db);
 }
 
 var api = app.MapGroup("/api/v1");

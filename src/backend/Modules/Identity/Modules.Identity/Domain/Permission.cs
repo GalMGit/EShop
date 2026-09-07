@@ -1,9 +1,7 @@
 namespace Modules.Identity.Domain;
 
-public sealed class Role
+public sealed class Permission
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    
-    public ICollection<Permission> Permissions { get; set; } = [];
 }

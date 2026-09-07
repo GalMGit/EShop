@@ -1,8 +1,9 @@
-
 using EShop.Api.DI;
 using Modules.Identity.DI;
 using EShop.Shared.Endpoint;
 using JasperFx.CodeGeneration.Model;
+using Microsoft.EntityFrameworkCore;
+using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Scalar.AspNetCore;
 using Wolverine;
 
@@ -19,6 +20,14 @@ builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider
+        .GetRequiredService<IdentityDbContext>();
+
+    await db.Database.MigrateAsync();
+}
+
 var api = app.MapGroup("/api/v1");
 app.MapEndpoints(api);
 
@@ -33,5 +42,8 @@ app.MapScalarApiReference("/docs",options =>
             auth.Description = "Bearer Token";
         });
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

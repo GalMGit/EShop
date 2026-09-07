@@ -7,17 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\Persistence\Configs\" />
-      <Folder Include="Infrastructure\Persistence\Context\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\..\Common\EShop.Contracts\EShop.Contracts.csproj" />
       <ProjectReference Include="..\..\..\Common\EShop.Shared\EShop.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="WolverineFx" Version="6.33.0" />
+        <PackageReference Include="WolverineFx"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
+        <PackageReference Include="BCrypt.Net-Next"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
     </ItemGroup>
 
 </Project>

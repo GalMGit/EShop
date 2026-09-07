@@ -36,7 +36,7 @@ public class JwtProvider(
             user.Roles
                 .SelectMany(role => role.Permissions)
                 .Select(permission =>
-                    new Claim("permission", permission.Name)));
+                    new Claim(PermissionClaim.Type, permission.Name)));
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

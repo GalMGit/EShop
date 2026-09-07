@@ -11,7 +11,7 @@ public sealed class PermissionPolicyProvider(
         string policyName)
     {
         var policy = new AuthorizationPolicyBuilder()
-            .RequireClaim("permission", policyName)
+            .RequireClaim(PermissionClaim.Type, policyName)
             .Build();
 
         return Task.FromResult<AuthorizationPolicy?>(policy);

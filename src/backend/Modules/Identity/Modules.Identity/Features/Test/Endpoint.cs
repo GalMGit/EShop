@@ -1,4 +1,5 @@
 using EShop.Shared.Endpoint;
+using EShop.Shared.Names;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -11,6 +12,6 @@ public sealed class Endpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("users", () => "Эндпоинт только для админа")
-            .RequireAuthorization("users.read");
+            .RequireAuthorization(PermissionNames.UsersRead);
     }
 }

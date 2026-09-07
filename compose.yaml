@@ -5,3 +5,9 @@
       context: .
       dockerfile: src/backend/EShop.Api/Dockerfile
 
+  eshop.emailworker:
+    image: eshop.emailworker
+    build:
+      context: .
+      dockerfile: src/backend/Workers/EShop.EmailWorker/Dockerfile
+

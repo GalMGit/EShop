@@ -38,7 +38,7 @@ public static class IdentitySeeder
 
             var permission = new Permission
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 Name = permissionName
             };
 
@@ -65,7 +65,7 @@ public static class IdentitySeeder
 
             var role = new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 Name = roleName
             };
 
@@ -153,7 +153,7 @@ public static class IdentitySeeder
 
         var admin = new User
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Username = options.Username,
             Email = options.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(options.Password),

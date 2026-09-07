@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Identity;
+using EShop.Shared.Names;
+using Microsoft.EntityFrameworkCore;
 using Modules.Identity.Application.Abstractions.Auth;
 using Modules.Identity.Domain;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
@@ -13,12 +14,17 @@ public sealed class CreateUserHandler(
         CreateUserCommand command,
         CancellationToken ct)
     {
+        var customerRole = await context.Roles
+            .SingleAsync(x =>
+                x.Name == RoleNames.Customer, ct);
+        
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Username = command.Request.Username,
             CreatedAt = DateTime.UtcNow,
-            Email = "example@gmail.com",
+            Roles = [customerRole],
+            Email = command.Request.Email,
             PasswordHash = passwordHasher.GenerateHash(
                 command.Request.Password)
         };

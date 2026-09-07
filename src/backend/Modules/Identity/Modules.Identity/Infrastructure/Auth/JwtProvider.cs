@@ -22,11 +22,10 @@ public class JwtProvider(
     
     public string GenerateToken(User user)
     {
-        Claim[] claims = [
+        List<Claim> claims = [
             new(ClaimTypes.Name, user.Username),
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Email, user.Email),
-           
         ];
 
         claims.AddRange(

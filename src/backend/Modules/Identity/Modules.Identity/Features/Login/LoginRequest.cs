@@ -1,3 +1,5 @@
 namespace Modules.Identity.Features.Login;
 
-public sealed record LoginRequest();
+public sealed record LoginRequest(
+    string Email, 
+    string Password);

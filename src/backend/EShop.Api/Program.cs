@@ -7,9 +7,16 @@ using Microsoft.Extensions.Options;
 using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Scalar.AspNetCore;
+using Serilog;
 using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
+
 
 builder.Host.UseWolverine(opt =>
 {

@@ -13,6 +13,9 @@
         <PackageReference Include="Scalar.AspNetCore"/>
         <PackageReference Include="WolverineFx"/>
         <PackageReference Include="WolverineFx.RuntimeCompilation"/>
+        <PackageReference Include="Serilog.AspNetCore"/>
+        <PackageReference Include="Serilog.Settings.Configuration"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
     </ItemGroup>
 
     <ItemGroup>

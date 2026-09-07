@@ -1,0 +1,59 @@
+using System.Reflection;
+using EShop.EmailWorker.Abstractions;
+
+namespace EShop.EmailWorker.Email;
+
+public sealed class EmailTemplateService : IEmailTemplateService
+{
+    public EmailTaskDto GetRegistrationConfirmation(
+        string toEmail,
+        string username,
+        string code)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        using var stream = assembly.GetManifestResourceStream(
+            "EShop.EmailWorker.Email.Templates.Register.html");
+
+        if (stream is null)
+            throw new FileNotFoundException(
+                "Embedded resource Register.html not found.");
+
+        using var reader = new StreamReader(stream);
+
+        var html = reader.ReadToEnd()
+            .Replace("{{Username}}", username)
+            .Replace("{{Code}}", code);
+
+        return new EmailTaskDto(
+            toEmail,
+            "Подтверждение регистрации в EShop",
+            html);
+    }
+    
+    public EmailTaskDto GetResetConfirmation(
+        string toEmail,
+        string code)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        using var stream = assembly.GetManifestResourceStream(
+            "EShop.EmailWorker.Email.Templates.Reset.html");
+
+        if (stream is null)
+            throw new FileNotFoundException(
+                "Embedded resource Reset.html not found.");
+
+        using var reader = new StreamReader(stream);
+
+        var html = reader.ReadToEnd()
+            .Replace("{{Email}}", toEmail)
+            .Replace("{{Code}}", code);
+
+        return new EmailTaskDto(
+            toEmail, 
+            "Подтверждение смены пароля в EShop", 
+            html);
+        
+    }
+}

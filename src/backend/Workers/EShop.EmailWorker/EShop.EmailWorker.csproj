@@ -9,12 +9,29 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <EmbeddedResource Include="Email/Templates/Register.html"/>
+        <EmbeddedResource Include="Email/Templates/Reset.html"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MailKit" />
         <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="WolverineFx.RabbitMQ" />
+        <PackageReference Include="WolverineFx"/>
+        <PackageReference Include="WolverineFx.RuntimeCompilation"/>
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DI\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\EShop.Contracts\EShop.Contracts.csproj" />
     </ItemGroup>
 </Project>

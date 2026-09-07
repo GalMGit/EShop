@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
+using EShop.Contracts.Identity.Events;
 using EShop.Shared.Endpoint;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Modules.Identity.Application.Abstractions.Auth;
+using Modules.Identity.Application.Cache;
 using Modules.Identity.Features.CreateUser;
 using Modules.Identity.Infrastructure.Auth;
+using Modules.Identity.Infrastructure.Cache;
 using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Wolverine;
@@ -28,7 +31,7 @@ public static class DependencyInjection
             options.Discovery.IncludeAssembly(
                 typeof(IdentityModuleMarker).Assembly);
 
-            options.PublishMessage<CreateUserRequest>()
+            options.PublishMessage<UserStartRegistrationEvent>()
                 .ToRabbitQueue("eshop-email");
         }
     }
@@ -43,6 +46,12 @@ public static class DependencyInjection
                 o.UseNpgsql(configuration.GetConnectionString("IdentityDatabase"));
             });
             
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("Redis");
+                options.InstanceName = "EShop_";
+            });
+            
             services.AddAuth(configuration);
             
             services.Configure<AdminOptions>(
@@ -54,6 +63,7 @@ public static class DependencyInjection
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<IJwtProvider, JwtProvider>();
+            services.AddSingleton<ICacheService, RedisCacheService>();
             
             return services;
         }

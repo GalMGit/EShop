@@ -2,11 +2,14 @@
   <Folder Name="/src/" />
   <Folder Name="/src/backend/">
     <Project Path="src/backend/EShop.Api/EShop.Api.csproj" />
-    <Project Path="src/backend/EShop.Contracts/EShop.Contracts.csproj" />
-    <Project Path="src/backend/EShop.Shared/EShop.Shared.csproj" />
   </Folder>
-  <Folder Name="/src/backend/Modules/">
-    <Project Path="src/backend/Modules/EShop.Modules.Identity/EShop.Modules.Identity.csproj" />
+  <Folder Name="/src/backend/Common/">
+    <Project Path="src/backend/Common/EShop.Contracts/EShop.Contracts.csproj" />
+    <Project Path="src/backend/Common/EShop.Shared/EShop.Shared.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Modules/" />
+  <Folder Name="/src/backend/Modules/Identity/">
+    <Project Path="src/backend/Modules/Identity/Modules.Identity/Modules.Identity.csproj" />
   </Folder>
   <Folder Name="/tests/" />
 </Solution>

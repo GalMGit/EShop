@@ -12,7 +12,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\EShop.Shared\EShop.Shared.csproj" />
+      <ProjectReference Include="..\..\..\Common\EShop.Contracts\EShop.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\Common\EShop.Shared\EShop.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

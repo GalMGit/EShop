@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Wolverine;
 
-namespace EShop.Modules.Identity.Features.Test;
+namespace Modules.Identity.Features.Test;
 
 public sealed class TestEndpoint : IEndpoint
 {

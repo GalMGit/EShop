@@ -1,4 +1,4 @@
-namespace EShop.Modules.Identity.Features.CreateUser;
+namespace Modules.Identity.Features.CreateUser;
 
 public sealed class CreateUserHandler
 {

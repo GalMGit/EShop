@@ -3,7 +3,7 @@ using EShop.Shared.Endpoint;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EShop.Modules.Identity.DI;
+namespace Modules.Identity.DI;
 
 public static class DependencyInjection
 {

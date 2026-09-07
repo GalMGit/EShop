@@ -1,6 +1,6 @@
 
-using EShop.Modules.Identity.DI;
 using Microsoft.OpenApi;
+using Modules.Identity.DI;
 
 namespace EShop.Api.DI;
 

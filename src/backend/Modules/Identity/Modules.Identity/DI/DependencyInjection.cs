@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Modules.Identity.Application.Abstractions.Auth;
 using Modules.Identity.Infrastructure.Auth;
+using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 
 namespace Modules.Identity.DI;
@@ -27,7 +28,12 @@ public static class DependencyInjection
             });
             
             services.AddAuth(configuration);
+            
+            services.Configure<AdminOptions>(
+                configuration.GetSection("Identity:Admin"));
+            
             services.AddEndpoints(Assembly.GetExecutingAssembly());
+            
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             

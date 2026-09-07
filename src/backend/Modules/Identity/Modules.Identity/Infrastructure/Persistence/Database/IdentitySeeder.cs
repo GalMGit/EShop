@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Modules.Identity.Domain;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 
@@ -8,8 +9,10 @@ public static class IdentitySeeder
 {
     public static async Task SeedAsync(
         IdentityDbContext db,
+        IOptions<AdminOptions> options,
         CancellationToken ct = default)
     {
+        AdminOptions adminOptions = options.Value;
         var permissionNames = new[]
         {
             "products.read",
@@ -71,6 +74,8 @@ public static class IdentitySeeder
         }
 
         await db.SaveChangesAsync(ct);
+
+        
         
         await AddPermissionsAsync(
             roles["Manager"],
@@ -105,6 +110,11 @@ public static class IdentitySeeder
             permissions.Keys);
 
         await db.SaveChangesAsync(ct);
+        
+        await SeedAdminAsync(db,
+            roles["Admin"],
+            adminOptions,
+            ct);
     }
 
     private static Task AddPermissionsAsync(
@@ -127,5 +137,32 @@ public static class IdentitySeeder
         }
 
         return Task.CompletedTask;
+    }
+    
+    private static async Task SeedAdminAsync(
+        IdentityDbContext db,
+        Role adminRole,
+        AdminOptions options,
+        CancellationToken ct)
+    {
+        var adminExists = await db.Users
+            .AnyAsync(x => x.Email == options.Email, ct);
+
+        if (adminExists)
+            return;
+
+        var admin = new User
+        {
+            Id = Guid.NewGuid(),
+            Username = options.Username,
+            Email = options.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(options.Password),
+            CreatedAt = DateTime.UtcNow,
+            Roles = [adminRole]
+        };
+
+        db.Users.Add(admin);
+
+        await db.SaveChangesAsync(ct);
     }
 }

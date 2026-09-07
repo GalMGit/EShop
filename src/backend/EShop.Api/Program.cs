@@ -3,6 +3,7 @@ using Modules.Identity.DI;
 using EShop.Shared.Endpoint;
 using JasperFx.CodeGeneration.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Scalar.AspNetCore;
@@ -25,9 +26,12 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider
         .GetRequiredService<IdentityDbContext>();
+    
+    var adminOptions = scope.ServiceProvider
+        .GetRequiredService<IOptions<AdminOptions>>();
 
     await db.Database.MigrateAsync();
-    await IdentitySeeder.SeedAsync(db);
+    await IdentitySeeder.SeedAsync(db, adminOptions);
 }
 
 var api = app.MapGroup("/api/v1");

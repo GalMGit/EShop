@@ -1,20 +1,18 @@
 <Project>
-
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageVersion Include="WolverineFx" Version="6.33.0" />
-        <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.33.0" />
-        <PackageVersion Include="Scalar.AspNetCore" Version="2.17.2" />
-        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
-        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
-        <PackageVersion Include="BCrypt.Net-Next" Version="4.1.0" />
-        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7" />
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.7" />
-        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.3.12" />
+    <PackageVersion Include="WolverineFx" Version="6.33.0" />
+    <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.33.0" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.17.2" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
+    <PackageVersion Include="BCrypt.Net-Next" Version="4.1.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.7" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+  </ItemGroup>
 </Project>

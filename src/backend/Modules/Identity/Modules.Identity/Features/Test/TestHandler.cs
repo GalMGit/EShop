@@ -5,6 +5,7 @@ public sealed class TestHandler
     public TestResponse Handle(
         TestQuery query)
     {
-        return new TestResponse("Это тестовый эндпоинт!");
+        
+        return new TestResponse("1");
     }
 }

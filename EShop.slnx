@@ -14,5 +14,8 @@
   <Folder Name="/src/backend/Modules/Identity/">
     <Project Path="src/backend/Modules/Identity/Modules.Identity/Modules.Identity.csproj" />
   </Folder>
+  <Folder Name="/src/backend/Workers/">
+    <Project Path="src/backend/Workers/EShop.EmailWorker/EShop.EmailWorker.csproj" />
+  </Folder>
   <Folder Name="/tests/" />
 </Solution>

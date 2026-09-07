@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Modules.Identity.DI;
 using Modules.Identity.Domain;
 
 namespace Modules.Identity.Infrastructure.Persistence.Database.Context;
@@ -17,7 +18,7 @@ public sealed class IdentityDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(
-            Assembly.GetExecutingAssembly());
+            typeof(IdentityModuleMarker).Assembly);
         
         base.OnModelCreating(modelBuilder);
     }

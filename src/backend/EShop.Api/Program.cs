@@ -9,6 +9,7 @@ using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
+using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +18,11 @@ builder.Host.UseSerilog((context, services, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration);
 });
 
-
 builder.Host.UseWolverine(opt =>
 {
+    opt.UseRabbitMq(builder.Configuration.GetConnectionString("RabbitMq")!);
     opt.ServiceLocationPolicy = ServiceLocationPolicy.AlwaysAllowed;
-    opt.Discovery.IncludeAssembly(
-        typeof(IdentityModuleMarker).Assembly);
+    opt.AddIdentityMessaging();
 });
 
 builder.Services.AddConfiguration(builder.Configuration);

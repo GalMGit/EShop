@@ -10,14 +10,29 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Modules.Identity.Application.Abstractions.Auth;
+using Modules.Identity.Features.CreateUser;
 using Modules.Identity.Infrastructure.Auth;
 using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
+using Wolverine;
+using Wolverine.RabbitMQ;
 
 namespace Modules.Identity.DI;
 
 public static class DependencyInjection
 {
+    extension(WolverineOptions options)
+    {
+        public void AddIdentityMessaging()
+        {
+            options.Discovery.IncludeAssembly(
+                typeof(IdentityModuleMarker).Assembly);
+
+            options.PublishMessage<CreateUserRequest>()
+                .ToRabbitQueue("eshop-email");
+        }
+    }
+    
     extension(IServiceCollection services)
     {
         public IServiceCollection AddIdentityModule(
@@ -33,8 +48,8 @@ public static class DependencyInjection
             services.Configure<AdminOptions>(
                 configuration.GetSection("Identity:Admin"));
             
-            services.AddEndpoints(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddEndpoints(typeof(IdentityModuleMarker).Assembly);
+            services.AddValidatorsFromAssembly(typeof(IdentityModuleMarker).Assembly);
             
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
@@ -45,10 +60,13 @@ public static class DependencyInjection
         
         private void AddAuth(IConfiguration configuration)
         {
-            services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+            services.Configure<JwtOptions>(
+                configuration.GetSection(nameof(JwtOptions)));
 
             services.AddOptions<JwtOptions>()
-                .Validate(o => !string.IsNullOrEmpty(o.SecretKey), "SecretKey is required")
+                .Validate(o => 
+                    !string.IsNullOrEmpty(o.SecretKey), 
+                    "SecretKey is required")
                 .ValidateOnStart();
 
             var jwtOptions = configuration

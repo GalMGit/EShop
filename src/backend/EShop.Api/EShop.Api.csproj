@@ -12,6 +12,7 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
         <PackageReference Include="Scalar.AspNetCore"/>
         <PackageReference Include="WolverineFx"/>
+        <PackageReference Include="WolverineFx.RabbitMQ" />
         <PackageReference Include="WolverineFx.RuntimeCompilation"/>
         <PackageReference Include="Serilog.AspNetCore"/>
         <PackageReference Include="Serilog.Settings.Configuration"/>

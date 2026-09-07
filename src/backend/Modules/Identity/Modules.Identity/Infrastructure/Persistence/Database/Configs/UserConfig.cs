@@ -38,6 +38,8 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.UpdatedAt);
 
         builder.Property(x => x.BannedAt);
+        
+        builder.Property(x => x.DeletedAt);
 
         builder.HasMany(x => x.Roles)
             .WithMany()

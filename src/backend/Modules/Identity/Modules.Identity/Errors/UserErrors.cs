@@ -1,4 +1,4 @@
-using EShop.Shared.Result;
+using EShop.Shared.ResultType;
 
 namespace Modules.Identity.Errors;
 

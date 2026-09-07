@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace EShop.Shared.Result;
+namespace EShop.Shared.ResultType;
 
 public static class ResultExtensions
 {
@@ -49,7 +49,7 @@ public static class ResultExtensions
     }
 
     public static IResult ToHttpResponse(
-        this Result result)
+        this ResultType.Result result)
     {
         if (result.IsSuccess)
             return Results.NoContent();
@@ -67,7 +67,8 @@ public static class ResultExtensions
                 Results.BadRequest(new
                 {
                     result.Error.Code,
-                    result.Error.Message
+                    result.Error.Message,
+                    result.Error.Detail
                 }),
 
             ErrorType.Conflict =>

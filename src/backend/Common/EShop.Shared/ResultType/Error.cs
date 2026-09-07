@@ -1,9 +1,10 @@
-namespace EShop.Shared.Result;
+namespace EShop.Shared.ResultType;
 
 public sealed record Error(
     string Code,
     string Message,
-    ErrorType Type)
+    ErrorType Type,
+    object? Detail = null)
 {
     public static Error Failure(
         string code,
@@ -12,8 +13,13 @@ public sealed record Error(
 
     public static Error Validation(
         string code,
-        string message)
-        => new(code, message, ErrorType.Validation);
+        string message,
+        object? detail = null)
+        => new(
+            code,
+            message, 
+            ErrorType.Validation,
+            detail);
 
     public static Error NotFound(
         string code,

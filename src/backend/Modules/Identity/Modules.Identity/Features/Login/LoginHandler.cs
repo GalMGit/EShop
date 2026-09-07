@@ -1,4 +1,4 @@
-using EShop.Shared.Result;
+using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Identity.Application.Abstractions.Auth;
 using Modules.Identity.Errors;

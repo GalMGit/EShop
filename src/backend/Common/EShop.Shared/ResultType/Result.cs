@@ -1,4 +1,4 @@
-namespace EShop.Shared.Result;
+namespace EShop.Shared.ResultType;
 
 public class Result
 {

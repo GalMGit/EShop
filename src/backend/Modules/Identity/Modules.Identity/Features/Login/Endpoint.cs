@@ -1,5 +1,5 @@
 using EShop.Shared.Endpoint;
-using EShop.Shared.Result;
+using EShop.Shared.ResultType;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

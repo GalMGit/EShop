@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +18,12 @@
     <ItemGroup>
       <ProjectReference Include="..\Common\EShop.Shared\EShop.Shared.csproj" />
       <ProjectReference Include="..\Modules\Identity\Modules.Identity\Modules.Identity.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

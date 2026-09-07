@@ -3,4 +3,5 @@ namespace Modules.Identity.Features.CreateUser;
 public sealed record CreateUserRequest(
     string Username,
     string Email,
-    string Password);
+    string Password,
+    string ConfirmPassword);

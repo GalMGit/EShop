@@ -10,42 +10,7 @@ public static class ResultExtensions
         if (result.IsSuccess)
             return Results.Ok(result.Value);
 
-        return result.Error!.Type switch
-        {
-            ErrorType.NotFound =>
-                Results.NotFound(new
-                {
-                    result.Error.Code,
-                    result.Error.Message
-                }),
-
-            ErrorType.Validation =>
-                Results.BadRequest(new
-                {
-                    result.Error.Code,
-                    result.Error.Message
-                }),
-
-            ErrorType.Conflict =>
-                Results.Conflict(new
-                {
-                    result.Error.Code,
-                    result.Error.Message
-                }),
-
-            ErrorType.Unauthorized =>
-                Results.Unauthorized(),
-
-            ErrorType.Forbidden =>
-                Results.Forbid(),
-
-            _ =>
-                Results.BadRequest(new
-                {
-                    result.Error.Code,
-                    result.Error.Message
-                })
-        };
+        return result.Error!.ToHttpResponse();
     }
 
     public static IResult ToHttpResponse(
@@ -54,28 +19,33 @@ public static class ResultExtensions
         if (result.IsSuccess)
             return Results.NoContent();
 
-        return result.Error!.Type switch
+        return result.Error!.ToHttpResponse();
+    }
+
+    private static IResult ToHttpResponse(this Error error)
+    {
+        return error.Type switch
         {
             ErrorType.NotFound =>
                 Results.NotFound(new
                 {
-                    result.Error.Code,
-                    result.Error.Message
+                    error.Code,
+                    error.Message
                 }),
 
             ErrorType.Validation =>
                 Results.BadRequest(new
                 {
-                    result.Error.Code,
-                    result.Error.Message,
-                    result.Error.Detail
+                    error.Code,
+                    error.Message,
+                    error.Detail
                 }),
 
             ErrorType.Conflict =>
                 Results.Conflict(new
                 {
-                    result.Error.Code,
-                    result.Error.Message
+                    error.Code,
+                    error.Message
                 }),
 
             ErrorType.Unauthorized =>
@@ -87,8 +57,8 @@ public static class ResultExtensions
             _ =>
                 Results.BadRequest(new
                 {
-                    result.Error.Code,
-                    result.Error.Message
+                    error.Code,
+                    error.Message
                 })
         };
     }

@@ -39,9 +39,10 @@ public sealed class FluentValidationFilter<T> : IEndpointFilter
                 x => x.Select(e => e.ErrorMessage).ToArray());
 
         return Result.Failure(
-            Error.Validation(
-                "validation.failed",
-                "One or more validation errors occurred.",
-                errors));
+                Error.Validation(
+                    "validation.failed",
+                    "One or more validation errors occurred.",
+                    errors))
+            .ToHttpResponse();
     }
 }

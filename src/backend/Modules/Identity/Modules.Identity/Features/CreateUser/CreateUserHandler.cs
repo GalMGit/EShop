@@ -1,4 +1,5 @@
 using EShop.Shared.Names;
+using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Identity.Application.Abstractions.Auth;
 using Modules.Identity.Domain;
@@ -10,7 +11,7 @@ public sealed class CreateUserHandler(
     IdentityDbContext context,
     IPasswordHasher passwordHasher)
 {
-    public async Task Handle(
+    public async Task<Result> Handle(
         CreateUserCommand command,
         CancellationToken ct)
     {
@@ -31,5 +32,7 @@ public sealed class CreateUserHandler(
 
         await context.Users.AddAsync(user, ct);
         await context.SaveChangesAsync(ct);
+        
+        return Result.Success();
     }
 }

@@ -1,4 +1,6 @@
 using EShop.Shared.Endpoint;
+using EShop.Shared.ResultType;
+using EShop.Shared.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -15,11 +17,14 @@ public sealed class Endpoint : IEndpoint
                 IMessageBus command,
                 CancellationToken ct) =>
             {
-                await command.InvokeAsync(
+                var result = await command.InvokeAsync<Result>(
                     new CreateUserCommand(
                         request), ct);
+
+                return result.ToHttpResponse();
             })
             .AllowAnonymous()
-            .WithTags("Identity");
+            .WithTags("Identity")
+            .AddEndpointFilter<FluentValidationFilter<CreateUserRequest>>();
     }
 }

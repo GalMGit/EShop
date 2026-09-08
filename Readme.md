@@ -1,0 +1,1 @@
+E-Shop with Modular Monolith and Vertical Slice Architecture

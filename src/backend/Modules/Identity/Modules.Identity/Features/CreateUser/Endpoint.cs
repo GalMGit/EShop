@@ -14,10 +14,10 @@ public sealed class Endpoint : IEndpoint
     {
         app.MapPost("auth/register", async (
                 CreateUserRequest request,
-                IMessageBus command,
+                IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await command.InvokeAsync<Result>(
+                var result = await bus.InvokeAsync<Result>(
                     new CreateUserCommand(
                         request), ct);
 

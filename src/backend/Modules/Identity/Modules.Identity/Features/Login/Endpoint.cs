@@ -13,10 +13,10 @@ public sealed class Endpoint : IEndpoint
     {
         app.MapPost("auth/login", async (
                 LoginRequest request,
-                IMessageBus command,
+                IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await command.InvokeAsync<Result<LoginResponse>>(
+                var result = await bus.InvokeAsync<Result<LoginResponse>>(
                     new LoginCommand(
                         request), ct);
 

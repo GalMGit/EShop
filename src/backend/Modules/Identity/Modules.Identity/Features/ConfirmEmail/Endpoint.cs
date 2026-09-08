@@ -12,12 +12,12 @@ public sealed class Endpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("auth/email-confirm", async (
+        app.MapPost("auth/email/confirm", async (
                 ConfirmEmailRequest request,
-                IMessageBus command,
+                IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await command.InvokeAsync<Result>(
+                var result = await bus.InvokeAsync<Result>(
                     new ConfirmEmailCommand(
                         request), ct);
 

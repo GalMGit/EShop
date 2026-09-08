@@ -13,7 +13,6 @@ using Wolverine;
 namespace Modules.Identity.Features.CreateUser;
 
 public sealed class CreateUserHandler(
-    IdentityDbContext context,
     ICacheService cacheService,
     IMessageBus bus,
     IPasswordHasher passwordHasher)
@@ -26,16 +25,13 @@ public sealed class CreateUserHandler(
         
         if (await cacheService.ExistsAsync(
                 cacheKey, ct))
-            return Result.Failure(UserErrors.RegistrationPending);
+            return Result.Failure(
+                UserErrors.RegistrationPending);
         
         var confirmationCode =
             RandomNumberGenerator
                 .GetInt32(10000, 100000)
                 .ToString();
-        
-        var customerRole = await context.Roles
-            .SingleAsync(x =>
-                x.Name == RoleNames.Customer, ct);
         
         var tempUser = new TempUser
         {
@@ -45,7 +41,6 @@ public sealed class CreateUserHandler(
             PasswordHash = passwordHasher.GenerateHash(
                 command.Request.Password),
             CreatedAt = DateTime.UtcNow,
-            Roles = [customerRole],
             ConfirmationCode = confirmationCode,
             CodeExpiresAt = DateTime.UtcNow.AddMinutes(5)
         };

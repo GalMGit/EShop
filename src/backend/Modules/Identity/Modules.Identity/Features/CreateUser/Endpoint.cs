@@ -12,7 +12,7 @@ public sealed class Endpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("users/register", async (
+        app.MapPost("auth/register", async (
                 CreateUserRequest request,
                 IMessageBus command,
                 CancellationToken ct) =>
@@ -24,7 +24,7 @@ public sealed class Endpoint : IEndpoint
                 return result.ToHttpResponse();
             })
             .AllowAnonymous()
-            .WithTags("Identity")
+            .WithTags(Tags.Identity)
             .AddEndpointFilter<FluentValidationFilter<CreateUserRequest>>();
     }
 }

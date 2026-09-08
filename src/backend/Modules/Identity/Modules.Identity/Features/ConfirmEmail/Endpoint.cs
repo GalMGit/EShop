@@ -1,28 +1,30 @@
 using EShop.Shared.Endpoint;
 using EShop.Shared.ResultType;
+using EShop.Shared.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Wolverine;
 
-namespace Modules.Identity.Features.Login;
+namespace Modules.Identity.Features.ConfirmEmail;
 
 public sealed class Endpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("auth/login", async (
-                LoginRequest request,
+        app.MapPost("auth/email-confirm", async (
+                ConfirmEmailRequest request,
                 IMessageBus command,
                 CancellationToken ct) =>
             {
-                var result = await command.InvokeAsync<Result<LoginResponse>>(
-                    new LoginCommand(
+                var result = await command.InvokeAsync<Result>(
+                    new ConfirmEmailCommand(
                         request), ct);
 
                 return result.ToHttpResponse();
             })
+            .WithTags(Tags.Identity)
             .AllowAnonymous()
-            .WithTags(Tags.Identity);
+            .AddEndpointFilter<FluentValidationFilter<ConfirmEmailRequest>>();
     }
 }

@@ -11,8 +11,23 @@
     <Project Path="src/backend/Common/EShop.Shared/EShop.Shared.csproj" />
   </Folder>
   <Folder Name="/src/backend/Modules/" />
+  <Folder Name="/src/backend/Modules/Cart/">
+    <Project Path="src/backend/Modules/Cart/Modules.Cart/Modules.Cart.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Modules/Catalog/">
+    <Project Path="src\backend\Modules\Catalog\Modules.Catalog\Modules.Catalog.csproj" />
+  </Folder>
   <Folder Name="/src/backend/Modules/Identity/">
     <Project Path="src/backend/Modules/Identity/Modules.Identity/Modules.Identity.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Modules/Inventory/">
+    <Project Path="src/backend/Modules/Inventory/Modules.Inventory/Modules.Inventory.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Modules/Order/">
+    <Project Path="src/backend/Modules/Order/Modules.Order/Modules.Order.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Modules/Payment/">
+    <Project Path="src/backend/Modules/Payment/Modules.Payment/Modules.Payment.csproj" />
   </Folder>
   <Folder Name="/src/backend/Workers/">
     <Project Path="src/backend/Workers/EShop.EmailWorker/EShop.EmailWorker.csproj" />

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Modules.Identity.Application.Abstractions.Auth;
 using Modules.Identity.Application.Cache;
@@ -35,6 +36,26 @@ public static class DependencyInjection
                 .ToRabbitQueue("eshop-email");
         }
     }
+
+    extension(IServiceProvider services)
+    {
+        public async Task InitializeIdentityAsync()
+        {
+            using var scope = services.CreateScope();
+
+            var db = scope.ServiceProvider
+                .GetRequiredService<IdentityDbContext>();
+
+            var adminOptions = scope.ServiceProvider
+                .GetRequiredService<IOptions<AdminOptions>>();
+
+            await db.Database.MigrateAsync();
+
+            await IdentitySeeder.SeedAsync(
+                db,
+                adminOptions);
+        }
+    }
     
     extension(IServiceCollection services)
     {
@@ -57,8 +78,11 @@ public static class DependencyInjection
             services.Configure<AdminOptions>(
                 configuration.GetSection("Identity:Admin"));
             
-            services.AddEndpoints(typeof(IdentityModuleMarker).Assembly);
-            services.AddValidatorsFromAssembly(typeof(IdentityModuleMarker).Assembly);
+            services.AddEndpoints(
+                typeof(IdentityModuleMarker).Assembly);
+            
+            services.AddValidatorsFromAssembly(
+                typeof(IdentityModuleMarker).Assembly);
             
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();

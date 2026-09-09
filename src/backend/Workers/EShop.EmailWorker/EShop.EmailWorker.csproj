@@ -28,10 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DI\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Common\EShop.Contracts\EShop.Contracts.csproj" />
     </ItemGroup>
 </Project>

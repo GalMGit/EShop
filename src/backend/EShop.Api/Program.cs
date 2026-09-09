@@ -2,10 +2,7 @@ using EShop.Api.DI;
 using Modules.Identity.DI;
 using EShop.Shared.Endpoint;
 using JasperFx.CodeGeneration.Model;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Modules.Identity.Infrastructure.Persistence.Database;
-using Modules.Identity.Infrastructure.Persistence.Database.Context;
+using Modules.Catalog.DI;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -23,23 +20,15 @@ builder.Host.UseWolverine(opt =>
     opt.UseRabbitMq(builder.Configuration.GetConnectionString("RabbitMq")!);
     opt.ServiceLocationPolicy = ServiceLocationPolicy.AlwaysAllowed;
     opt.AddIdentityMessaging();
+    opt.AddCatalogMessaging();
 });
 
 builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider
-        .GetRequiredService<IdentityDbContext>();
-    
-    var adminOptions = scope.ServiceProvider
-        .GetRequiredService<IOptions<AdminOptions>>();
-
-    await db.Database.MigrateAsync();
-    await IdentitySeeder.SeedAsync(db, adminOptions);
-}
+await app.Services.InitializeIdentityAsync();
+await app.Services.InitializeCatalogAsync();
 
 var api = app.MapGroup("/api/v1");
 app.MapEndpoints(api);

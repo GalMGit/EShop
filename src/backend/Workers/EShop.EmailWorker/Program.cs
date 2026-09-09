@@ -1,15 +1,12 @@
 using EShop.EmailWorker.Abstractions;
+using EShop.EmailWorker.DI;
 using EShop.EmailWorker.Email;
 using Wolverine;
 using Wolverine.RabbitMQ;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.Services.Configure<EmailOptions>(
-    builder.Configuration.GetSection(nameof(EmailOptions)));
-
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+builder.Services.AddConfiguration(builder.Configuration);
 
 builder.UseWolverine(opt =>
 {

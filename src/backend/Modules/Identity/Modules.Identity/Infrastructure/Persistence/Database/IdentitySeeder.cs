@@ -17,6 +17,9 @@ public static class IdentitySeeder
         {
             "products.read",
             "products.write",
+            
+            "category.read",
+            "category.write",
 
             "orders.read",
             "orders.manage",
@@ -74,8 +77,6 @@ public static class IdentitySeeder
         }
 
         await db.SaveChangesAsync(ct);
-
-        
         
         await AddPermissionsAsync(
             roles["Manager"],

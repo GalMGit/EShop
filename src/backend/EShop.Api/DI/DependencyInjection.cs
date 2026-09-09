@@ -1,5 +1,6 @@
 
 using Microsoft.OpenApi;
+using Modules.Catalog.DI;
 using Modules.Identity.DI;
 
 namespace EShop.Api.DI;
@@ -43,6 +44,7 @@ public static class DependencyInjection
             });
             
             services.AddIdentityModule(configuration);
+            services.AddCatalogModule(configuration);
         }
         
     }

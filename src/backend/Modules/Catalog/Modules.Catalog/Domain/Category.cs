@@ -6,4 +6,5 @@ public sealed class Category
     public string Name { get; set; } = null!;
     public Guid? ParentId { get; set; }
     public bool IsActive { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

@@ -22,6 +22,9 @@ public sealed class CategoryConfig : IEntityTypeConfiguration<Category>
         builder.Property(x => x.IsActive)
             .IsRequired();
 
+        builder.Property(x => x.CreatedAt)
+            .IsRequired();
+
         builder.Property(x => x.ParentId);
 
         builder.HasOne<Category>()

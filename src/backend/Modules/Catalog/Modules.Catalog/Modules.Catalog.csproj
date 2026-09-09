@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <Folder Include="Application\" />
+      <Folder Include="Features\Categories\" />
     </ItemGroup>
     
     <ItemGroup>

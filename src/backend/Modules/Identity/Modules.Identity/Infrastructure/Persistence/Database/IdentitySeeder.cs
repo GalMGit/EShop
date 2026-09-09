@@ -18,6 +18,9 @@ public static class IdentitySeeder
             "products.read",
             "products.write",
             
+            "brand.read",
+            "brand.write",
+            
             "category.read",
             "category.write",
 

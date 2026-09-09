@@ -4,7 +4,7 @@ using Modules.Catalog.Domain;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 
-namespace Modules.Catalog.Features.CreateCategory;
+namespace Modules.Catalog.Features.Categories.CreateCategory;
 
 public sealed class CreateCategoryHandler(
     CatalogDbContext context)

@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Wolverine;
 
-namespace Modules.Catalog.Features.CreateCategory;
+namespace Modules.Catalog.Features.Categories.CreateCategory;
 
 public sealed class Endpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("category", async (
+        app.MapPost("categories", async (
                 CreateCategoryRequest request,
                 IMessageBus bus,
                 CancellationToken ct) =>

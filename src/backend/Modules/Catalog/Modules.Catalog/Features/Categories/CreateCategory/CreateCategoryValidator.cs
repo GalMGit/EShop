@@ -1,9 +1,8 @@
-using System.Text.RegularExpressions;
 using FluentValidation;
 
-namespace Modules.Catalog.Features.CreateCategory;
+namespace Modules.Catalog.Features.Categories.CreateCategory;
 
-public sealed class CreateCategoryValidator: AbstractValidator<CreateCategoryRequest>
+public sealed class CreateCategoryValidator : AbstractValidator<CreateCategoryRequest>
 {
     public CreateCategoryValidator()
     {

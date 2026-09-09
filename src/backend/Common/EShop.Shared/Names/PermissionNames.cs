@@ -7,6 +7,9 @@ public static class PermissionNames
     
     public const string CategoryRead = "category.read";
     public const string CategoryWrite = "category.write";
+    
+    public const string BrandRead = "brand.read";
+    public const string BrandWrite = "brand.write";
 
     public const string OrdersRead = "orders.read";
     public const string OrdersManage = "orders.manage";

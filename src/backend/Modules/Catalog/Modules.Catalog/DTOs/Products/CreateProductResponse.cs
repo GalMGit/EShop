@@ -1,6 +1,6 @@
 namespace Modules.Catalog.DTOs.Products;
 
-public sealed record ProductResponse(
+public sealed record CreateProductResponse(
     Guid Id,
     string Name,
     string Description,

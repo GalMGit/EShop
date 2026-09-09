@@ -8,7 +8,9 @@ public static class ProductMapper
     public static ProductResponse ToDto(
         this Product product)
     {
-        return new ProductResponse(product.Name,
+        return new ProductResponse(
+            product.Id,
+            product.Name,
             product.Description,
             product.Price,
             product.CategoryId,

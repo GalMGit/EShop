@@ -1,15 +1,17 @@
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Domain;
+using Modules.Catalog.DTOs.Brands;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
+using Modules.Catalog.Mapping.Brands;
 
 namespace Modules.Catalog.Features.Brands.CreateBrand;
 
 public sealed class CreateBrandHandler(
     CatalogDbContext context)
 {
-    public async Task<Result<CreateBrandResponse>> Handle(
+    public async Task<Result<BrandResponse>> Handle(
         CreateBrandCommand command,
         CancellationToken ct)
     {
@@ -18,7 +20,7 @@ public sealed class CreateBrandHandler(
                 x.Name == command.Request.Name, ct);
 
         if (brandExists)
-            return Result<CreateBrandResponse>.Failure(
+            return Result<BrandResponse>.Failure(
                 BrandErrors.BrandExists);
 
         var brand = new Brand
@@ -32,9 +34,7 @@ public sealed class CreateBrandHandler(
         await context.Brands.AddAsync(brand, ct);
         await context.SaveChangesAsync(ct);
 
-        return Result<CreateBrandResponse>.Success(
-            new CreateBrandResponse(
-                brand.Id, 
-                brand.Name));
+        return Result<BrandResponse>.Success(
+            brand.ToDto());
     }
 }

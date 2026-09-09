@@ -5,6 +5,7 @@ using EShop.Shared.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Modules.Catalog.DTOs.Categories;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Categories.CreateCategory;
@@ -18,7 +19,7 @@ public sealed class Endpoint : IEndpoint
                 IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await bus.InvokeAsync<Result<CreateCategoryResponse>>(
+                var result = await bus.InvokeAsync<Result<CategoryResponse>>(
                     new CreateCategoryCommand(
                         request), ct);
 

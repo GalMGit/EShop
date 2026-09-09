@@ -1,6 +1,6 @@
-namespace Modules.Catalog.Features.Products.CreateProduct;
+namespace Modules.Catalog.DTOs.Products;
 
-public sealed record CreateProductResponse(
+public sealed record ProductResponse(
     string Name,
     string Description,
     decimal Price,

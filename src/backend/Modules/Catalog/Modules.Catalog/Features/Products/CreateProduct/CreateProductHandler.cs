@@ -1,15 +1,17 @@
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Domain;
+using Modules.Catalog.DTOs.Products;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
+using Modules.Catalog.Mapping.Products;
 
 namespace Modules.Catalog.Features.Products.CreateProduct;
 
 public sealed class CreateProductHandler(
     CatalogDbContext context)
 {
-    public async Task<Result<CreateProductResponse>> Handle(
+    public async Task<Result<ProductResponse>> Handle(
         CreateProductCommand command,
         CancellationToken ct)
     {
@@ -17,14 +19,14 @@ public sealed class CreateProductHandler(
             .AnyAsync(x => x.Id == command.Request.CategoryId, ct);
 
         if (!categoryExists)
-            return Result<CreateProductResponse>.Failure(
+            return Result<ProductResponse>.Failure(
                 CategoryErrors.NotFound);
 
         var brandExists = await context.Brands
             .AnyAsync(x => x.Id == command.Request.BrandId, ct);
         
         if(!brandExists)
-            return Result<CreateProductResponse>.Failure(
+            return Result<ProductResponse>.Failure(
                 BrandErrors.NotFound);
 
         var product = new Product
@@ -43,14 +45,7 @@ public sealed class CreateProductHandler(
         await context.Products.AddAsync(product, ct);
         await context.SaveChangesAsync(ct);
 
-        return Result<CreateProductResponse>.Success(
-            new CreateProductResponse(
-                product.Name,
-                product.Description,
-                product.Price,
-                product.CategoryId,
-                product.BrandId,
-                product.CreatedAt,
-                product.Specifications));
+        return Result<ProductResponse>.Success(
+            product.ToDto());
     }
 }

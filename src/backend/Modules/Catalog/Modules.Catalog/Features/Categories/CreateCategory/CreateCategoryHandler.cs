@@ -1,15 +1,17 @@
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Domain;
+using Modules.Catalog.DTOs.Categories;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
+using Modules.Catalog.Mapping.Categories;
 
 namespace Modules.Catalog.Features.Categories.CreateCategory;
 
 public sealed class CreateCategoryHandler(
     CatalogDbContext context)
 {
-    public async Task<Result<CreateCategoryResponse>> Handle(
+    public async Task<Result<CategoryResponse>> Handle(
         CreateCategoryCommand command, 
         CancellationToken ct)
     {
@@ -18,7 +20,7 @@ public sealed class CreateCategoryHandler(
                 x.Name == command.Request.Name, ct);
 
         if (categoryExists)
-            return Result<CreateCategoryResponse>.Failure(
+            return Result<CategoryResponse>.Failure(
                 CategoryErrors.CategoryExists);
 
         if (command.Request.ParentId is not null)
@@ -28,7 +30,7 @@ public sealed class CreateCategoryHandler(
                     x.ParentId == command.Request.ParentId, ct);
         
             if(!parentCategoryExists)
-                return Result<CreateCategoryResponse>.Failure(
+                return Result<CategoryResponse>.Failure(
                     CategoryErrors.ParentNotFound);
         }
         
@@ -45,10 +47,7 @@ public sealed class CreateCategoryHandler(
 
         await context.SaveChangesAsync(ct);
 
-        return Result<CreateCategoryResponse>.Success(
-            new CreateCategoryResponse(
-                category.Name, 
-                category.Id, 
-                category.ParentId));
+        return Result<CategoryResponse>.Success(
+            category.ToDto());
     }
 }

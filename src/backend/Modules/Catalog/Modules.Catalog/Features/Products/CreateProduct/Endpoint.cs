@@ -5,6 +5,7 @@ using EShop.Shared.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Modules.Catalog.DTOs.Products;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Products.CreateProduct;
@@ -18,7 +19,7 @@ public sealed class Endpoint : IEndpoint
                 IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await bus.InvokeAsync<Result<CreateProductResponse>>(
+                var result = await bus.InvokeAsync<Result<ProductResponse>>(
                     new CreateProductCommand(
                         request), ct);
 

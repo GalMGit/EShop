@@ -13,4 +13,9 @@ public static class CategoryErrors
         Error.Conflict(
             "catalog.parent_category_not_found", 
             "Родительской категории с таким Id не существует.");
+    
+    public static readonly Error NotFound = 
+        Error.NotFound(
+            "catalog.category_not_found", 
+            "Категории с таким Id не существует.");
 }

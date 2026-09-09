@@ -12,7 +12,7 @@ public sealed class Product
     public Guid CategoryId { get; set; }
     public Guid BrandId { get; set; }
 
-    public Dictionary<string, object> Specifications { get; set; } = [];
+    public Dictionary<string, object?> Specifications { get; set; } = [];
 
     public bool IsActive { get; set; }
 

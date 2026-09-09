@@ -8,6 +8,6 @@ public sealed class CreateBrandValidator : AbstractValidator<CreateBrandRequest>
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Название не может быть пустым")
-            .MaximumLength(30).WithMessage("Название не может быть больше 30 символов");
+            .MaximumLength(100).WithMessage("Название не может быть больше 100 символов");
     }
 }

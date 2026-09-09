@@ -38,9 +38,18 @@ public static class DependencyInjection
         public IServiceCollection AddCatalogModule(
             IConfiguration configuration)
         {
-            services.AddDbContext<CatalogDbContext>(o =>
+            services.AddDbContext<CatalogDbContext>(options =>
             {
-                o.UseNpgsql(configuration.GetConnectionString("CatalogDatabase"));
+                options.UseNpgsql(
+                    configuration.GetConnectionString(
+                        "CatalogDatabase"),
+                    npgsqlOptions =>
+                    {
+                        npgsqlOptions.ConfigureDataSource(dataSourceBuilder =>
+                        {
+                            dataSourceBuilder.EnableDynamicJson();
+                        });
+                    });
             });
             
             services.AddEndpoints(

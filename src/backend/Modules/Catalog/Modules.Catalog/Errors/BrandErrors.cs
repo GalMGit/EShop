@@ -8,4 +8,9 @@ public static class BrandErrors
         Error.Conflict(
             "catalog.brand_exists",
             "Бренд с таким названием уже существует.");
+    
+    public static readonly Error NotFound =
+        Error.NotFound(
+            "catalog.brand_not_found",
+            "Бренда с таким id не существует.");
 }

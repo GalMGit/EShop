@@ -1,11 +1,11 @@
 namespace Modules.Catalog.DTOs.Products;
 
-public sealed record ProductResponse(
+public sealed record ProductListItemResponse(
     Guid Id,
     string Name,
-    string Description,
+    string? Image,
     decimal Price,
     Guid CategoryId,
     Guid BrandId,
     DateTime CreatedAt,
-    Dictionary<string, object?> Specifications);
+    int AvailableQuantity);

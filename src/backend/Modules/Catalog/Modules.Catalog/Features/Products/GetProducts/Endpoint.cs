@@ -16,8 +16,9 @@ public sealed class Endpoint : IEndpoint
                 IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await bus.InvokeAsync<Result<List<ProductResponse>>>(
-                    new GetProductsQuery(), ct);
+                var result = await bus.InvokeAsync<
+                    Result<List<ProductListItemResponse>>>(
+                        new GetProductsQuery(), ct);
 
                 return result.ToHttpResponse();
             })

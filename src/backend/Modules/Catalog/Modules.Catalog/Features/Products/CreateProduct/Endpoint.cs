@@ -17,13 +17,26 @@ public sealed class Endpoint : IEndpoint
         app.MapPost("products", async (
                 CreateProductRequest request,
                 IMessageBus bus,
+                LinkGenerator linkGenerator,
+                HttpContext httpContext,
                 CancellationToken ct) =>
             {
-                var result = await bus.InvokeAsync<Result<ProductResponse>>(
-                    new CreateProductCommand(
-                        request), ct);
+                var result = await bus.InvokeAsync<
+                    Result<CreateProductResponse>>(
+                        new CreateProductCommand(
+                            request), ct);
+                
+                if (result.IsFailure)
+                    return result.ToHttpResponse();
 
-                return result.ToHttpResponse();
+                var location = linkGenerator.GetUriByName(
+                    httpContext,
+                    EndpointNames.GetProduct,
+                    new { id = result.Value!.Id });
+
+                return Results.Created(
+                    location,
+                    result.Value);
             })
             .RequireAuthorization(PermissionNames.ProductsWrite)
             .WithTags(Tags.Catalog)

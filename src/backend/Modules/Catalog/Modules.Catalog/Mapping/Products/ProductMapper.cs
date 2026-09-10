@@ -5,10 +5,11 @@ namespace Modules.Catalog.Mapping.Products;
 
 public static class ProductMapper
 {
-    public static ProductResponse ToDto(
-        this Product product)
+    public static ProductDetailsResponse ToDetailsDto(
+        this Product product,
+        int availableQuantity)
     {
-        return new ProductResponse(
+        return new ProductDetailsResponse(
             product.Id,
             product.Name,
             product.Description,
@@ -16,6 +17,24 @@ public static class ProductMapper
             product.CategoryId,
             product.BrandId,
             product.CreatedAt,
-            product.Specifications);
+            product.Specifications,
+            availableQuantity
+            );
+    }
+    
+    public static ProductListItemResponse ToListItemDto(
+        this Product product,
+        int availableQuantity)
+    {
+        return new ProductListItemResponse(
+            product.Id,
+            product.Name,
+            null,
+            product.Price,
+            product.CategoryId,
+            product.BrandId,
+            product.CreatedAt,
+            availableQuantity
+        );
     }
 }

@@ -17,12 +17,14 @@ public sealed class Endpoint : IEndpoint
                 IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await bus.InvokeAsync<Result<ProductResponse>>(
+                var result = await bus.InvokeAsync<
+                    Result<ProductDetailsResponse>>(
                     new GetProductQuery(id), ct);
 
                 return result.ToHttpResponse();
             })
             .AllowAnonymous()
-            .WithTags(Tags.Catalog);
+            .WithTags(Tags.Catalog)
+            .WithName(EndpointNames.GetProduct);
     }
 }

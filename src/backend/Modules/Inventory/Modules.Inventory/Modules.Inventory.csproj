@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Application\" />
-      <Folder Include="Features\Stock\" />
     </ItemGroup>
 
     <ItemGroup>

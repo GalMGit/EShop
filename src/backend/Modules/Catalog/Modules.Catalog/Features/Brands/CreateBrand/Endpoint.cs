@@ -19,9 +19,10 @@ public sealed class Endpoint : IEndpoint
                 IMessageBus bus,
                 CancellationToken ct) =>
             {
-                var result = await bus.InvokeAsync<Result<BrandResponse>>(
-                    new CreateBrandCommand(
-                        request), ct);
+                var result = await bus.InvokeAsync<
+                    Result<BrandResponse>>(
+                        new CreateBrandCommand(
+                            request), ct);
 
                 return result.ToHttpResponse();
             })

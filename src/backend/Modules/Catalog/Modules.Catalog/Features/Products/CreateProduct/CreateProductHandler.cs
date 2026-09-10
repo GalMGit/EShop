@@ -14,7 +14,7 @@ public sealed class CreateProductHandler(
     CatalogDbContext context,
     IMessageBus bus)
 {
-    public async Task<Result<ProductResponse>> Handle(
+    public async Task<Result<CreateProductResponse>> Handle(
         CreateProductCommand command,
         CancellationToken ct)
     {
@@ -23,7 +23,7 @@ public sealed class CreateProductHandler(
                 x.Id == command.Request.CategoryId, ct);
 
         if (!categoryExists)
-            return Result<ProductResponse>.Failure(
+            return Result<CreateProductResponse>.Failure(
                 CategoryErrors.NotFound);
 
         var brandExists = await context.Brands
@@ -31,7 +31,7 @@ public sealed class CreateProductHandler(
                 x.Id == command.Request.BrandId, ct);
         
         if(!brandExists)
-            return Result<ProductResponse>.Failure(
+            return Result<CreateProductResponse>.Failure(
                 BrandErrors.NotFound);
 
         var product = new Product
@@ -54,7 +54,7 @@ public sealed class CreateProductHandler(
             new ProductCreatedEvent(
                 product.Id));
 
-        return Result<ProductResponse>.Success(
-            product.ToDto());
+        return Result<CreateProductResponse>.Success(
+            new CreateProductResponse(product.Id));
     }
 }

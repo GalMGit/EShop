@@ -1,3 +1,4 @@
+using EShop.Shared.Endpoint;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,9 @@ public static class DependencyInjection
             {
                 o.UseNpgsql(configuration.GetConnectionString("InventoryDatabase"));
             });
+            
+            services.AddEndpoints(
+                typeof(InventoryModuleMarker).Assembly);
 
             return services;
         }

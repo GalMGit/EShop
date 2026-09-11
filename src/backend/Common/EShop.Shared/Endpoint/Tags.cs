@@ -4,4 +4,5 @@ public static class Tags
 {
     public const string Identity = nameof(Identity);
     public const string Catalog = nameof(Catalog);
+    public const string Inventory = nameof(Inventory);
 }

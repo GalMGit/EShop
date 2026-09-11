@@ -1,3 +1,4 @@
+using EShop.Shared.Names;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Modules.Identity.Domain;
@@ -15,23 +16,23 @@ public static class IdentitySeeder
         AdminOptions adminOptions = options.Value;
         var permissionNames = new[]
         {
-            "products.read",
-            "products.write",
+            PermissionNames.ProductsRead,
+            PermissionNames.ProductsWrite,
             
-            "brand.read",
-            "brand.write",
+            PermissionNames.BrandRead,
+            PermissionNames.BrandWrite,
             
-            "category.read",
-            "category.write",
+            PermissionNames.CategoryRead,
+            PermissionNames.CategoryWrite,
 
-            "orders.read",
-            "orders.manage",
+            PermissionNames.OrdersRead,
+            PermissionNames.OrdersManage,
 
-            "stock.read",
-            "stock.manage",
+            PermissionNames.StockRead,
+            PermissionNames.StockManage,
             
-            "users.read",
-            "users.manage"
+            PermissionNames.UsersRead,
+            PermissionNames.UsersManage
         };
 
         var permissions = await db.Permissions
@@ -54,10 +55,11 @@ public static class IdentitySeeder
 
         var roleNames = new[]
         {
-            "Customer",
-            "Manager",
-            "Warehouse",
-            "Admin"
+            RoleNames.Customer,
+            RoleNames.CatalogManager,
+            RoleNames.OrderManager,
+            RoleNames.Warehouse,
+            RoleNames.Admin,
         };
 
         var roles = await db.Roles
@@ -82,41 +84,51 @@ public static class IdentitySeeder
         await db.SaveChangesAsync(ct);
         
         await AddPermissionsAsync(
-            roles["Manager"],
+            roles[RoleNames.CatalogManager],
             permissions,
             [
-                "products.read",
-                "products.write",
-                "orders.read",
-                "orders.manage"
-            ]);
-
-        await AddPermissionsAsync(
-            roles["Warehouse"],
-            permissions,
-            [
-                "products.read",
-                "stock.read",
-                "stock.manage"
-            ]);
-
-        await AddPermissionsAsync(
-            roles["Customer"],
-            permissions,
-            [
-                "products.read",
-                "orders.read"
+                PermissionNames.ProductsRead,
+                PermissionNames.ProductsWrite,
+                PermissionNames.BrandRead,
+                PermissionNames.BrandWrite,
+                PermissionNames.CategoryRead,
+                PermissionNames.CategoryWrite
             ]);
         
         await AddPermissionsAsync(
-            roles["Admin"],
+            roles[RoleNames.OrderManager],
+            permissions,
+            [
+                PermissionNames.OrdersRead,
+                PermissionNames.OrdersManage,
+            ]);
+
+        await AddPermissionsAsync(
+            roles[RoleNames.Warehouse],
+            permissions,
+            [
+                PermissionNames.ProductsRead,
+                PermissionNames.StockRead,
+                PermissionNames.StockManage,
+            ]);
+
+        await AddPermissionsAsync(
+            roles[RoleNames.Customer],
+            permissions,
+            [
+                PermissionNames.ProductsRead,
+                PermissionNames.OrdersRead,
+            ]);
+        
+        await AddPermissionsAsync(
+            roles[RoleNames.Admin],
             permissions,
             permissions.Keys);
 
         await db.SaveChangesAsync(ct);
         
         await SeedAdminAsync(db,
-            roles["Admin"],
+            roles[RoleNames.Admin],
             adminOptions,
             ct);
     }

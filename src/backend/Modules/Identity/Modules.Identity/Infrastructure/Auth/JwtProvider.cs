@@ -35,6 +35,7 @@ public class JwtProvider(
         claims.AddRange(
             user.Roles
                 .SelectMany(role => role.Permissions)
+                .Distinct()
                 .Select(permission =>
                     new Claim(PermissionClaim.Type, permission.Name)));
 

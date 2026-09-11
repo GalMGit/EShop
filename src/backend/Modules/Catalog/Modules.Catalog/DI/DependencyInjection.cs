@@ -1,10 +1,13 @@
+using Elastic.Clients.Elasticsearch;
 using EShop.Contracts.Identity.Events;
 using EShop.Shared.Endpoint;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
+using Modules.Catalog.Infrastructure.Search;
 using Wolverine;
 
 namespace Modules.Catalog.DI;
@@ -50,6 +53,21 @@ public static class DependencyInjection
                             dataSourceBuilder.EnableDynamicJson();
                         });
                     });
+            });
+            
+            services.Configure<ElasticsearchOptions>(
+                configuration.GetSection("Elasticsearch"));
+
+            services.AddSingleton(sp =>
+            {
+                var options = sp
+                    .GetRequiredService<IOptions<ElasticsearchOptions>>()
+                    .Value;
+
+                var settings = new ElasticsearchClientSettings(
+                    new Uri(options.Url));
+
+                return new ElasticsearchClient(settings);
             });
             
             services.AddEndpoints(

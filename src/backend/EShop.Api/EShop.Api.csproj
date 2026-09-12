@@ -21,9 +21,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Common\EShop.Shared\EShop.Shared.csproj" />
+      <ProjectReference Include="..\Modules\Cart\Modules.Cart\Modules.Cart.csproj" />
       <ProjectReference Include="..\Modules\Catalog\Modules.Catalog\Modules.Catalog.csproj" />
       <ProjectReference Include="..\Modules\Identity\Modules.Identity\Modules.Identity.csproj" />
       <ProjectReference Include="..\Modules\Inventory\Modules.Inventory\Modules.Inventory.csproj" />
+      <ProjectReference Include="..\Modules\Order\Modules.Order\Modules.Order.csproj" />
+      <ProjectReference Include="..\Modules\Payment\Modules.Payment\Modules.Payment.csproj" />
     </ItemGroup>
 
     <ItemGroup>

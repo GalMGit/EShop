@@ -64,7 +64,9 @@ public static class DependencyInjection
         {
             services.AddDbContext<IdentityDbContext>(o =>
             {
-                o.UseNpgsql(configuration.GetConnectionString("IdentityDatabase"));
+                o.UseNpgsql(
+                    configuration.GetConnectionString(
+                        "IdentityDatabase"));
             });
             
             services.AddStackExchangeRedisCache(options =>

@@ -8,9 +8,20 @@
 
     <ItemGroup>
       <Folder Include="Application\" />
-      <Folder Include="Domain\" />
       <Folder Include="Features\" />
-      <Folder Include="Infrastructure\Persistence\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="WolverineFx"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\EShop.Contracts\EShop.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\Common\EShop.Shared\EShop.Shared.csproj" />
     </ItemGroup>
 
 </Project>

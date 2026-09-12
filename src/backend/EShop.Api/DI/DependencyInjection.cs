@@ -1,5 +1,6 @@
 
 using Microsoft.OpenApi;
+using Modules.Cart.DI;
 using Modules.Catalog.DI;
 using Modules.Identity.DI;
 using Modules.Inventory.DI;
@@ -47,6 +48,7 @@ public static class DependencyInjection
             services.AddIdentityModule(configuration);
             services.AddCatalogModule(configuration);
             services.AddInventoryModule(configuration);
+            services.AddCartModule(configuration);
         }
         
     }

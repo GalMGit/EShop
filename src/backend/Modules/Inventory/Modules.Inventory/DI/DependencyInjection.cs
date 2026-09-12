@@ -38,7 +38,9 @@ public static class DependencyInjection
         {
             services.AddDbContext<InventoryDbContext>(o =>
             {
-                o.UseNpgsql(configuration.GetConnectionString("InventoryDatabase"));
+                o.UseNpgsql(
+                    configuration.GetConnectionString(
+                        "InventoryDatabase"));
             });
             
             services.AddEndpoints(

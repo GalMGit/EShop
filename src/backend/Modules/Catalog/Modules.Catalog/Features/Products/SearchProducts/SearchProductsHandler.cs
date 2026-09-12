@@ -2,6 +2,7 @@ using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using EShop.Shared.ResultType;
 using Modules.Catalog.DTOs.Products;
+using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Search;
 
 namespace Modules.Catalog.Features.Products.SearchProducts;
@@ -30,9 +31,7 @@ public sealed class SearchProductsHandler(
         if (!response.IsValidResponse)
         {
             return Result<SearchProductsResponse>.Failure(
-                Error.Failure(
-                    "search.failed",
-                    "Не удалось выполнить поиск товаров."));
+                ProductErrors.SearchFailed);
         }
 
         var products = response.Hits

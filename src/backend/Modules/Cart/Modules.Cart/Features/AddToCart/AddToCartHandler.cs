@@ -19,7 +19,7 @@ public sealed class AddToCartHandler(
     {
         var cart = await context.Carts
             .SingleOrDefaultAsync(x =>
-                x.Id == command.Request.CartId, ct);
+                x.UserId == command.UserId, ct);
 
         if (cart is null)
             return Result.Failure(

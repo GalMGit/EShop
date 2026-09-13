@@ -1,3 +1,4 @@
+using EShop.Shared.Endpoint;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,9 @@ public static class DependencyInjection
                     configuration.GetConnectionString(
                         "CartDatabase"));
             });
+            
+            services.AddEndpoints(
+                typeof(CartModuleMarker).Assembly);
 
             return services;
         }

@@ -1,3 +1,4 @@
+using EShop.Contracts.Events.Identity.Events;
 using EShop.Shared.Names;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
@@ -5,12 +6,14 @@ using Modules.Identity.Application.Cache;
 using Modules.Identity.Domain;
 using Modules.Identity.Errors;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
+using Wolverine;
 
 namespace Modules.Identity.Features.ConfirmEmail;
 
 public sealed class ConfirmEmailHandler(
     IdentityDbContext context,
-    ICacheService cacheService)
+    ICacheService cacheService,
+    IMessageBus bus)
 {
     public async Task<Result> Handle(
         ConfirmEmailCommand command,
@@ -60,6 +63,10 @@ public sealed class ConfirmEmailHandler(
 
         await cacheService.RemoveAsync(
             cacheKey, ct);
+
+        await bus.PublishAsync(
+            new UserCreatedEvent(
+                user.Id));
 
         return Result.Success();
     }

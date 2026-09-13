@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="CQ\Catalog\" />
       <Folder Include="Events\Orders\" />
     </ItemGroup>
 

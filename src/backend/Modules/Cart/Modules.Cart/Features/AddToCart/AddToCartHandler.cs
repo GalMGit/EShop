@@ -1,4 +1,5 @@
 using EShop.Contracts.CQ.Catalog;
+using EShop.Contracts.CQ.Catalog.Responses;
 using EShop.Contracts.CQ.Inventory.Responses;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;

@@ -5,6 +5,7 @@ using JasperFx.CodeGeneration.Model;
 using Modules.Cart.DI;
 using Modules.Catalog.DI;
 using Modules.Inventory.DI;
+using Modules.Orders.DI;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -25,6 +26,7 @@ builder.Host.UseWolverine(opt =>
     opt.AddCatalogMessaging();
     opt.AddInventoryMessaging();
     opt.AddCartMessaging();
+    opt.AddOrderMessaging();
 });
 
 builder.Services.AddConfiguration(builder.Configuration);
@@ -35,6 +37,7 @@ await app.Services.InitializeIdentityAsync();
 await app.Services.InitializeCatalogAsync();
 await app.Services.InitializeInventoryAsync();
 await app.Services.InitializeCartAsync();
+await app.Services.InitializeOrderAsync();
 
 var api = app.MapGroup("/api/v1");
 app.MapEndpoints(api);

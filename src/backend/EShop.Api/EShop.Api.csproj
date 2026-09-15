@@ -25,8 +25,8 @@
       <ProjectReference Include="..\Modules\Catalog\Modules.Catalog\Modules.Catalog.csproj" />
       <ProjectReference Include="..\Modules\Identity\Modules.Identity\Modules.Identity.csproj" />
       <ProjectReference Include="..\Modules\Inventory\Modules.Inventory\Modules.Inventory.csproj" />
-      <ProjectReference Include="..\Modules\Order\Modules.Order\Modules.Order.csproj" />
-      <ProjectReference Include="..\Modules\Payment\Modules.Payment\Modules.Payment.csproj" />
+      <ProjectReference Include="..\Modules\Orders\Modules.Orders\Modules.Orders.csproj" />
+      <ProjectReference Include="..\Modules\Payment\Modules.Payments\Modules.Payments.csproj" />
     </ItemGroup>
 
     <ItemGroup>

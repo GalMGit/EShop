@@ -1,6 +1,6 @@
 namespace EShop.Contracts.CQ.Catalog.Responses;
 
-public sealed record ProductForCartResponse(
-    Guid Id, 
+public sealed record ProductForOrderResponse(
+    Guid ProductId,
     decimal Price,
     bool IsActive);

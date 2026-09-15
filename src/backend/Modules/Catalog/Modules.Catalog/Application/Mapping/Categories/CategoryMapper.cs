@@ -1,7 +1,7 @@
 using Modules.Catalog.Domain;
 using Modules.Catalog.DTOs.Categories;
 
-namespace Modules.Catalog.Mapping.Categories;
+namespace Modules.Catalog.Application.Mapping.Categories;
 
 public static class CategoryMapper
 {

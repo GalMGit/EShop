@@ -1,7 +1,7 @@
 using Modules.Catalog.Domain;
 using Modules.Catalog.DTOs.Products;
 
-namespace Modules.Catalog.Mapping.Products;
+namespace Modules.Catalog.Application.Mapping.Products;
 
 public static class ProductMapper
 {

@@ -13,4 +13,9 @@ public static class OrderErrors
         Error.Failure(
             "orders.product_unavailable",
             "Продукт недоступен");
+    
+    public static readonly Error NotFound =
+        Error.NotFound(
+            "orders.not_found",
+            "Заказ не найден.");
 }

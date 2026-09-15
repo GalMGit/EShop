@@ -1,10 +1,10 @@
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Application.Mapping.Brands;
 using Modules.Catalog.Domain;
 using Modules.Catalog.DTOs.Brands;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
-using Modules.Catalog.Mapping.Brands;
 
 namespace Modules.Catalog.Features.Brands.CreateBrand;
 

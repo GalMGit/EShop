@@ -1,7 +1,7 @@
 using Modules.Catalog.Domain;
 using Modules.Catalog.DTOs.Brands;
 
-namespace Modules.Catalog.Mapping.Brands;
+namespace Modules.Catalog.Application.Mapping.Brands;
 
 public static class BrandMapper
 {

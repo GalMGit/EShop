@@ -20,6 +20,7 @@ public sealed class GetProductsForOrderHandler(
                 .Contains(x.Id))
             .Select(x => new ProductForOrderResponse(
                 x.Id,
+                x.Name,
                 x.Price,
                 x.IsActive))
             .ToListAsync(ct);

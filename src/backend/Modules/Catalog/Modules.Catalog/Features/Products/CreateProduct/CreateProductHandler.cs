@@ -5,7 +5,6 @@ using Modules.Catalog.Domain;
 using Modules.Catalog.DTOs.Products;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
-using Modules.Catalog.Mapping.Products;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Products.CreateProduct;

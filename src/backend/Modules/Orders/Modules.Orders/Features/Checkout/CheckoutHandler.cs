@@ -80,6 +80,7 @@ public sealed class CheckoutHandler(
                 OrderId = order.Id,
                 ProductId = product.ProductId,
                 Quantity = cartItem.Quantity,
+                ProductName = product.Name,
                 UnitPrice = product.Price
             });
         }

@@ -2,8 +2,9 @@ using Modules.Orders.Domain;
 
 namespace Modules.Orders.DTOs;
 
-public sealed record OrderResponse(
+public sealed record OrderWithItemsResponse(
     Guid Id,
     decimal TotalAmount,
     OrderStatus Status,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    List<OrderItemResponse> Items);

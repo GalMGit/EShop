@@ -10,7 +10,7 @@ namespace Modules.Orders.Features.GetOrder;
 public sealed class GetOrderHandler(
     OrderDbContext context)
 {
-    public async Task<Result<OrderResponse>> Handle(
+    public async Task<Result<OrderWithItemsResponse>> Handle(
         GetOrderQuery query,
         CancellationToken ct)
     {
@@ -23,10 +23,10 @@ public sealed class GetOrderHandler(
             .SingleOrDefaultAsync(ct);
 
         if (order is null)
-            return Result<OrderResponse>.Failure(
+            return Result<OrderWithItemsResponse>.Failure(
                 OrderErrors.NotFound);
 
-        return Result<OrderResponse>.Success(
-            order.ToOrderResponse());
+        return Result<OrderWithItemsResponse>.Success(
+            order.ToOrderWithItemsResponse());
     }
 }

@@ -1,9 +1,11 @@
 using EShop.Contracts.Catalog.Products;
 using Modules.Inventory.Domain;
 using Modules.Inventory.Infrastructure.Persistence.Database.Context;
+using Wolverine.Attributes;
 
 namespace Modules.Inventory.Features.IntegrationEvents;
 
+[Transactional(typeof(InventoryDbContext))]
 public sealed class ProductCreatedHandler(
     InventoryDbContext context)
 {
@@ -21,6 +23,5 @@ public sealed class ProductCreatedHandler(
         };
 
         await context.AddAsync(stock, ct);
-        await context.SaveChangesAsync(ct);
     }
 }

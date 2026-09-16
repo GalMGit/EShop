@@ -3,9 +3,11 @@ namespace Modules.Orders.Domain;
 public enum OrderStatus
 {
     Pending = 0,
-    StockReserved = 1,
-    PaymentPending = 2,
-    Paid = 3,
-    Confirmed = 4,
-    Cancelled = 5
+    ReservingInventory = 1,
+    InventoryReserved = 2,
+    ProcessingPayment = 3,
+    Paid = 4,
+    Completed = 5,
+    Cancelling = 6,
+    Cancelled = 7
 }

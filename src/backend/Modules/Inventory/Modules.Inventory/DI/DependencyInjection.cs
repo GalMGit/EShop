@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Inventory.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence.Durability;
+using Wolverine.Postgresql;
 
 namespace Modules.Inventory.DI;
 
@@ -11,10 +14,17 @@ public static class DependencyInjection
 {
     extension(WolverineOptions options)
     {
-        public void AddInventoryMessaging()
+        public void AddInventoryMessaging(
+            IConfiguration configuration)
         {
             options.Discovery.IncludeAssembly(
                 typeof(InventoryModuleMarker).Assembly);
+            
+            options.PersistMessagesWithPostgresql(
+                    configuration.GetConnectionString(
+                        "InventoryDatabase")!,
+                    role: MessageStoreRole.Ancillary)
+                .Enroll<InventoryDbContext>();
         }
     }
     
@@ -36,12 +46,13 @@ public static class DependencyInjection
         public IServiceCollection AddInventoryModule(
             IConfiguration configuration)
         {
-            services.AddDbContext<InventoryDbContext>(o =>
-            {
-                o.UseNpgsql(
-                    configuration.GetConnectionString(
-                        "InventoryDatabase"));
-            });
+            services.AddDbContextWithWolverineIntegration<InventoryDbContext>(
+                options =>
+                {
+                    options.UseNpgsql(
+                        configuration.GetConnectionString(
+                            "InventoryDatabase"));
+                });
             
             services.AddEndpoints(
                 typeof(InventoryModuleMarker).Assembly);

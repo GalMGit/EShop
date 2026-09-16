@@ -6,9 +6,11 @@ using Modules.Catalog.DTOs.Products;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.Attributes;
 
 namespace Modules.Catalog.Features.Products.CreateProduct;
 
+[Transactional(typeof(CatalogDbContext))]
 public sealed class CreateProductHandler(
     CatalogDbContext context,
     IMessageBus bus)
@@ -47,7 +49,6 @@ public sealed class CreateProductHandler(
         };
 
         await context.Products.AddAsync(product, ct);
-        await context.SaveChangesAsync(ct);
 
         await bus.PublishAsync(
             new ProductCreatedEvent(

@@ -11,7 +11,7 @@ public static class OrderMapper
         return new OrderResponse(
             order.Id,
             order.TotalAmount,
-            order.Status,
+            order.Status.ToString(),
             order.CreatedAt
         );
     }
@@ -22,7 +22,7 @@ public static class OrderMapper
         return new OrderWithItemsResponse(
             order.Id,
             order.TotalAmount,
-            order.Status,
+            order.Status.ToString(),
             order.CreatedAt,
             order.Items
                 .Select(x => 
@@ -31,7 +31,6 @@ public static class OrderMapper
         );
     }
     
-
     public static OrderItemResponse ToOrderItemResponse(
         this OrderItem orderItem)
     {

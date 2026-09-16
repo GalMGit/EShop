@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Orders.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence.Durability;
+using Wolverine.Postgresql;
 
 namespace Modules.Orders.DI;
 
@@ -14,9 +17,10 @@ public static class DependencyInjection
         public IServiceCollection AddOrderModule(
             IConfiguration configuration)
         {
-            services.AddDbContext<OrderDbContext>(o =>
+            services.AddDbContextWithWolverineIntegration<
+                OrderDbContext>(options =>
             {
-                o.UseNpgsql(
+                options.UseNpgsql(
                     configuration.GetConnectionString(
                         "OrderDatabase"));
             });
@@ -30,10 +34,17 @@ public static class DependencyInjection
     
     extension(WolverineOptions options)
     {
-        public void AddOrderMessaging()
+        public void AddOrderMessaging(
+            IConfiguration configuration)
         {
             options.Discovery.IncludeAssembly(
                 typeof(OrderModuleMarker).Assembly);
+
+            options.PersistMessagesWithPostgresql(
+                    configuration.GetConnectionString(
+                        "OrderDatabase")!,
+                    role: MessageStoreRole.Ancillary)
+                .Enroll<OrderDbContext>();
         }
     }
     

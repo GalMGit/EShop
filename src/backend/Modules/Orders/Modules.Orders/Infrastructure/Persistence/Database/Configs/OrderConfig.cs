@@ -23,7 +23,7 @@ public sealed class OrderConfig : IEntityTypeConfiguration<Order>
             .IsRequired();
 
         builder.Property(x => x.Status)
-            .HasConversion<int>()
+            .HasConversion<string>()
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)

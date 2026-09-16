@@ -9,6 +9,9 @@ using Microsoft.Extensions.Options;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 using Modules.Catalog.Infrastructure.Search;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence.Durability;
+using Wolverine.Postgresql;
 
 namespace Modules.Catalog.DI;
 
@@ -16,10 +19,17 @@ public static class DependencyInjection
 {
     extension(WolverineOptions options)
     {
-        public void AddCatalogMessaging()
+        public void AddCatalogMessaging(
+            IConfiguration configuration)
         {
             options.Discovery.IncludeAssembly(
                 typeof(CatalogModuleMarker).Assembly);
+
+            options.PersistMessagesWithPostgresql(
+                    configuration.GetConnectionString(
+                        "CatalogDatabase")!,
+                    role: MessageStoreRole.Ancillary)
+                .Enroll<CatalogDbContext>();
         }
     }
     
@@ -41,19 +51,21 @@ public static class DependencyInjection
         public IServiceCollection AddCatalogModule(
             IConfiguration configuration)
         {
-            services.AddDbContext<CatalogDbContext>(options =>
-            {
-                options.UseNpgsql(
-                    configuration.GetConnectionString(
-                        "CatalogDatabase"),
-                    npgsqlOptions =>
-                    {
-                        npgsqlOptions.ConfigureDataSource(dataSourceBuilder =>
+            services.AddDbContextWithWolverineIntegration<CatalogDbContext>(
+                options =>
+                {
+                    options.UseNpgsql(
+                        configuration.GetConnectionString(
+                            "CatalogDatabase"),
+                        npgsqlOptions =>
                         {
-                            dataSourceBuilder.EnableDynamicJson();
+                            npgsqlOptions.ConfigureDataSource(
+                                dataSourceBuilder =>
+                                {
+                                    dataSourceBuilder.EnableDynamicJson();
+                                });
                         });
-                    });
-            });
+                });
             
             services.Configure<ElasticsearchOptions>(
                 configuration.GetSection("Elasticsearch"));

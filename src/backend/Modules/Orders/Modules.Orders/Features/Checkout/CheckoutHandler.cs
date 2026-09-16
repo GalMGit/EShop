@@ -2,15 +2,18 @@ using EShop.Contracts.CQ.Cart;
 using EShop.Contracts.CQ.Cart.Responses;
 using EShop.Contracts.CQ.Catalog;
 using EShop.Contracts.CQ.Catalog.Responses;
+using EShop.Contracts.CQ.Orders.Events;
 using EShop.Shared.ResultType;
 using Modules.Orders.Domain;
 using Modules.Orders.DTOs;
 using Modules.Orders.Errors;
 using Modules.Orders.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.Attributes;
 
 namespace Modules.Orders.Features.Checkout;
 
+[Transactional(typeof(OrderDbContext))]
 public sealed class CheckoutHandler(
     OrderDbContext context,
     IMessageBus bus)
@@ -90,7 +93,8 @@ public sealed class CheckoutHandler(
         
         context.Orders.Add(order);
 
-        await context.SaveChangesAsync(ct);
+        await bus.PublishAsync(
+            new OrderCreated(order.Id));
         
         return Result<CheckoutResponse>.Success(
             new CheckoutResponse(

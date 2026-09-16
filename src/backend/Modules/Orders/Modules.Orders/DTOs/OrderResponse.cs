@@ -5,5 +5,5 @@ namespace Modules.Orders.DTOs;
 public sealed record OrderResponse(
     Guid Id,
     decimal TotalAmount,
-    OrderStatus Status,
+    string Status,
     DateTime CreatedAt);

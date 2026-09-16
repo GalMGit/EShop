@@ -9,6 +9,9 @@ using Modules.Orders.DI;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence.Durability;
+using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,12 +24,20 @@ builder.Host.UseSerilog((context, services, configuration) =>
 builder.Host.UseWolverine(opt =>
 {
     opt.UseRabbitMq(builder.Configuration.GetConnectionString("RabbitMq")!);
+    
+    opt.UseEntityFrameworkCoreTransactions();
+    
+    opt.PersistMessagesWithPostgresql(
+        builder.Configuration.GetConnectionString(
+            "WolverineDatabase")!,
+        role: MessageStoreRole.Main);
+    
     opt.ServiceLocationPolicy = ServiceLocationPolicy.AlwaysAllowed;
     opt.AddIdentityMessaging();
-    opt.AddCatalogMessaging();
-    opt.AddInventoryMessaging();
+    opt.AddCatalogMessaging(builder.Configuration);
+    opt.AddInventoryMessaging(builder.Configuration);
     opt.AddCartMessaging();
-    opt.AddOrderMessaging();
+    opt.AddOrderMessaging(builder.Configuration);
 });
 
 builder.Services.AddConfiguration(builder.Configuration);

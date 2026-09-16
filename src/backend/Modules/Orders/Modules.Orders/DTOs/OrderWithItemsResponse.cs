@@ -5,6 +5,6 @@ namespace Modules.Orders.DTOs;
 public sealed record OrderWithItemsResponse(
     Guid Id,
     decimal TotalAmount,
-    OrderStatus Status,
+    string Status,
     DateTime CreatedAt,
     List<OrderItemResponse> Items);

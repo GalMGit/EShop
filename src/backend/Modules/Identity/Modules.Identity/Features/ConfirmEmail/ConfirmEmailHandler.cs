@@ -7,9 +7,11 @@ using Modules.Identity.Domain;
 using Modules.Identity.Errors;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.Attributes;
 
 namespace Modules.Identity.Features.ConfirmEmail;
 
+[Transactional(typeof(IdentityDbContext))]
 public sealed class ConfirmEmailHandler(
     IdentityDbContext context,
     ICacheService cacheService,
@@ -59,7 +61,6 @@ public sealed class ConfirmEmailHandler(
         };
 
         await context.Users.AddAsync(user, ct);
-        await context.SaveChangesAsync(ct);
 
         await cacheService.RemoveAsync(
             cacheKey, ct);

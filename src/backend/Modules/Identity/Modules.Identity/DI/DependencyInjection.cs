@@ -19,6 +19,9 @@ using Modules.Identity.Infrastructure.Cache;
 using Modules.Identity.Infrastructure.Persistence.Database;
 using Modules.Identity.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence.Durability;
+using Wolverine.Postgresql;
 using Wolverine.RabbitMQ;
 
 namespace Modules.Identity.DI;
@@ -27,13 +30,21 @@ public static class DependencyInjection
 {
     extension(WolverineOptions options)
     {
-        public void AddIdentityMessaging()
+        public void AddIdentityMessaging(
+            IConfiguration configuration)
         {
             options.Discovery.IncludeAssembly(
                 typeof(IdentityModuleMarker).Assembly);
+            
+            options.PersistMessagesWithPostgresql(
+                    configuration.GetConnectionString(
+                        "IdentityDatabase")!,
+                    role: MessageStoreRole.Ancillary)
+                .Enroll<IdentityDbContext>();
 
             options.PublishMessage<UserStartRegistrationEvent>()
-                .ToRabbitQueue("eshop-email");
+                .ToRabbitQueue("eshop-email")
+                .UseDurableOutbox();
         }
     }
 
@@ -62,12 +73,13 @@ public static class DependencyInjection
         public IServiceCollection AddIdentityModule(
             IConfiguration configuration)
         {
-            services.AddDbContext<IdentityDbContext>(o =>
-            {
-                o.UseNpgsql(
-                    configuration.GetConnectionString(
-                        "IdentityDatabase"));
-            });
+            services.AddDbContextWithWolverineIntegration<IdentityDbContext>(
+                options =>
+                {
+                    options.UseNpgsql(
+                        configuration.GetConnectionString(
+                            "IdentityDatabase"));
+                });
             
             services.AddStackExchangeRedisCache(options =>
             {

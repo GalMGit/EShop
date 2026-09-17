@@ -2,9 +2,11 @@ using EShop.Contracts.Events.Identity.Events;
 using Microsoft.EntityFrameworkCore;
 using Modules.Cart.Domain;
 using Modules.Cart.Infrastructure.Persistence.Database.Context;
+using Wolverine.Attributes;
 
 namespace Modules.Cart.Features.IntegrationEvents;
 
+[Transactional(typeof(CartDbContext))]
 public sealed class UserCreatedHandler(
     CartDbContext context)
 {
@@ -26,7 +28,6 @@ public sealed class UserCreatedHandler(
             };
 
             await context.Carts.AddAsync(cart, ct);
-            await context.SaveChangesAsync(ct);
         }
     }
 }

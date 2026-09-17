@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Cart.Infrastructure.Persistence.Database.Context;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.Persistence.Durability;
+using Wolverine.Postgresql;
 
 namespace Modules.Cart.DI;
 
@@ -14,12 +17,13 @@ public static class DependencyInjection
         public IServiceCollection AddCartModule(
             IConfiguration configuration)
         {
-            services.AddDbContext<CartDbContext>(o =>
-            {
-                o.UseNpgsql(
-                    configuration.GetConnectionString(
-                        "CartDatabase"));
-            });
+            services.AddDbContextWithWolverineIntegration<CartDbContext>(
+                options =>
+                {
+                    options.UseNpgsql(
+                        configuration.GetConnectionString(
+                            "CartDatabase"));
+                });
             
             services.AddEndpoints(
                 typeof(CartModuleMarker).Assembly);
@@ -43,10 +47,17 @@ public static class DependencyInjection
     
     extension(WolverineOptions options)
     {
-        public void AddCartMessaging()
+        public void AddCartMessaging(
+            IConfiguration configuration)
         {
             options.Discovery.IncludeAssembly(
                 typeof(CartModuleMarker).Assembly);
+            
+            options.PersistMessagesWithPostgresql(
+                    configuration.GetConnectionString(
+                        "CartDatabase")!,
+                    role: MessageStoreRole.Ancillary)
+                .Enroll<CartDbContext>();
         }
     }
     

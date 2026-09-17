@@ -23,7 +23,9 @@ builder.Host.UseSerilog((context, services, configuration) =>
 
 builder.Host.UseWolverine(opt =>
 {
-    opt.UseRabbitMq(builder.Configuration.GetConnectionString("RabbitMq")!);
+    opt.UseRabbitMq(
+        builder.Configuration.GetConnectionString(
+            "RabbitMq")!);
     
     opt.UseEntityFrameworkCoreTransactions();
     
@@ -33,10 +35,10 @@ builder.Host.UseWolverine(opt =>
         role: MessageStoreRole.Main);
     
     opt.ServiceLocationPolicy = ServiceLocationPolicy.AlwaysAllowed;
-    opt.AddIdentityMessaging();
+    opt.AddIdentityMessaging(builder.Configuration);
     opt.AddCatalogMessaging(builder.Configuration);
     opt.AddInventoryMessaging(builder.Configuration);
-    opt.AddCartMessaging();
+    opt.AddCartMessaging(builder.Configuration);
     opt.AddOrderMessaging(builder.Configuration);
 });
 

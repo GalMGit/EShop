@@ -3,7 +3,7 @@ using Modules.Inventory.Domain;
 using Modules.Inventory.Infrastructure.Persistence.Database.Context;
 using Wolverine.Attributes;
 
-namespace Modules.Inventory.Features.IntegrationEvents;
+namespace Modules.Inventory.Features.IntegrationEvents.Catalog;
 
 [Transactional(typeof(InventoryDbContext))]
 public sealed class ProductCreatedHandler(

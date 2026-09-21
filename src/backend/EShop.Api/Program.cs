@@ -28,6 +28,8 @@ builder.Host.UseWolverine(opt =>
             "RabbitMq")!);
     
     opt.UseEntityFrameworkCoreTransactions();
+    opt.Policies.UseDurableOutboxOnAllSendingEndpoints();
+    opt.Policies.UseDurableInboxOnAllListeners();
     
     opt.PersistMessagesWithPostgresql(
         builder.Configuration.GetConnectionString(

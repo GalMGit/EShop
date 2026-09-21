@@ -94,7 +94,13 @@ public sealed class CheckoutHandler(
         context.Orders.Add(order);
 
         await bus.PublishAsync(
-            new OrderCreated(order.Id));
+            new OrderCreatedEvent(
+                order.Id,
+                order.Items
+                    .Select(x => new OrderCreatedItem(
+                        x.ProductId,
+                        x.Quantity))
+                    .ToArray()));
         
         return Result<CheckoutResponse>.Success(
             new CheckoutResponse(

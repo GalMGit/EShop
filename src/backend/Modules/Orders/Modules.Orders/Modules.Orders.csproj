@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="Features\CreateOrder\" />
-      <Folder Include="Features\IntegrationEvents\" />
     </ItemGroup>
     
     <ItemGroup>

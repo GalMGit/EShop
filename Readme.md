@@ -701,11 +701,6 @@ public sealed record ImageUploadedEvent(
 
 Изображения хранятся в object storage, а не непосредственно в PostgreSQL.
 
-Для локальной разработки может использоваться:
-
-```text
-MinIO
-```
 
 В production можно использовать любой S3-compatible storage.
 
@@ -851,7 +846,6 @@ src/
 ## Object Storage
 
 * S3-compatible storage
-* MinIO для локальной разработки
 
 ## Workers
 
@@ -872,7 +866,6 @@ src/
 
 Для запуска проекта необходимо установить:
 
-* .NET SDK;
 * Docker;
 * Docker Compose.
 
@@ -1231,7 +1224,7 @@ ImageProcessingFailed
 # Roadmap
 
 * [ ] Завершить ImageWorker
-* [ ] Интегрировать S3 / MinIO
+* [ ] Интегрировать S3
 * [ ] Resize изображений
 * [ ] Конвертация изображений в WebP / AVIF
 * [ ] Генерация thumbnails
@@ -1290,9 +1283,3 @@ InventoryReserved ─────► Cancelled
 ```
 
 ---
-
-# License
-
-Проект находится в стадии разработки и предназначен для изучения архитектуры, разработки и практического применения современных подходов к построению e-commerce систем.
-
-Лицензия проекта будет добавлена позднее.

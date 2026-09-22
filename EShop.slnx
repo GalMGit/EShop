@@ -31,6 +31,7 @@
   </Folder>
   <Folder Name="/src/backend/Workers/">
     <Project Path="src/backend/Workers/EShop.EmailWorker/EShop.EmailWorker.csproj" />
+    <Project Path="src/backend/Workers/EShop.ImageWorker/EShop.ImageWorker.csproj" />
   </Folder>
   <Folder Name="/tests/" />
 </Solution>

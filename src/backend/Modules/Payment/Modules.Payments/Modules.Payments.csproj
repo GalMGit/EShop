@@ -5,12 +5,24 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    
     <ItemGroup>
-      <Folder Include="Application\" />
-      <Folder Include="Domain\" />
-      <Folder Include="Features\" />
-      <Folder Include="Infrastructure\Persistence\" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="WolverineFx"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"/>
+        <PackageReference Include="WolverineFx.EntityFrameworkCore" />
+        <PackageReference Include="WolverineFx.Postgresql" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Features\IntegrationEvents\Orders\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\EShop.Contracts\EShop.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\Common\EShop.Shared\EShop.Shared.csproj" />
     </ItemGroup>
 
 </Project>

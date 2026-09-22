@@ -5,6 +5,7 @@ using Modules.Catalog.DI;
 using Modules.Identity.DI;
 using Modules.Inventory.DI;
 using Modules.Orders.DI;
+using Modules.Payments.DI;
 
 namespace EShop.Api.DI;
 
@@ -51,6 +52,7 @@ public static class DependencyInjection
             services.AddInventoryModule(configuration);
             services.AddCartModule(configuration);
             services.AddOrderModule(configuration);
+            services.AddPaymentModule(configuration);
         }
         
     }

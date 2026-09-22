@@ -1,20 +1,19 @@
-using EShop.Contracts.CQ.Payments;
-using EShop.Contracts.Events.Inventory;
+using EShop.Contracts.Events.Payments;
 using Microsoft.EntityFrameworkCore;
 using Modules.Orders.Domain;
 using Modules.Orders.Infrastructure.Persistence.Database.Context;
 using Wolverine;
 using Wolverine.Attributes;
 
-namespace Modules.Orders.Features.IntegrationEvents.Inventory;
+namespace Modules.Orders.Features.IntegrationEvents.Payments;
 
 [Transactional(typeof(OrderDbContext))]
-public sealed class InventoryReservedHandler(
+public sealed class PaymentFailedHandler(
     OrderDbContext context,
     IMessageBus bus)
 {
     public async Task Handle(
-        InventoryReservedEvent @event,
+        PaymentFailedEvent @event,
         CancellationToken ct)
     {
         var order = await context.Orders
@@ -24,16 +23,9 @@ public sealed class InventoryReservedHandler(
         if (order is null)
             return;
 
-        if (order.Status != OrderStatus.Pending)
+        if (order.Status != OrderStatus.InventoryReserved)
             return;
 
-        order.Status = OrderStatus.InventoryReserved;
-
-        await bus.SendAsync(
-            new ProcessPaymentCommand(
-                order.Id,
-                order.UserId,
-                order.TotalAmount,
-                "RUB"));
+        order.Status = OrderStatus.Cancelled;
     }
 }

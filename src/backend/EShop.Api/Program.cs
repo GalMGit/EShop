@@ -6,6 +6,7 @@ using Modules.Cart.DI;
 using Modules.Catalog.DI;
 using Modules.Inventory.DI;
 using Modules.Orders.DI;
+using Modules.Payments.DI;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -42,6 +43,7 @@ builder.Host.UseWolverine(opt =>
     opt.AddInventoryMessaging(builder.Configuration);
     opt.AddCartMessaging(builder.Configuration);
     opt.AddOrderMessaging(builder.Configuration);
+    opt.AddPaymentMessaging(builder.Configuration);
 });
 
 builder.Services.AddConfiguration(builder.Configuration);
@@ -53,6 +55,7 @@ await app.Services.InitializeCatalogAsync();
 await app.Services.InitializeInventoryAsync();
 await app.Services.InitializeCartAsync();
 await app.Services.InitializeOrderAsync();
+await app.Services.InitializePaymentAsync();
 
 var api = app.MapGroup("/api/v1");
 app.MapEndpoints(api);

@@ -1,3 +1,4 @@
+using EShop.Contracts.CQ.Inventory.Commands;
 using EShop.Contracts.Events.Payments;
 using Microsoft.EntityFrameworkCore;
 using Modules.Orders.Domain;
@@ -17,6 +18,7 @@ public sealed class PaymentFailedHandler(
         CancellationToken ct)
     {
         var order = await context.Orders
+            .Include(x => x.Items)
             .SingleOrDefaultAsync(x => 
                 x.Id == @event.OrderId, ct);
 
@@ -27,5 +29,14 @@ public sealed class PaymentFailedHandler(
             return;
 
         order.Status = OrderStatus.Cancelled;
+        
+        await bus.SendAsync(
+            new ReleaseInventoryCommand(
+                order.Id,
+                order.Items
+                    .Select(x => new ReleaseInventoryItem(
+                        x.ProductId,
+                        x.Quantity))
+                    .ToArray()));
     }
 }

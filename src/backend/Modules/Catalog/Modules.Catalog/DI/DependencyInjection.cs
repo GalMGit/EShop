@@ -6,8 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 using Modules.Catalog.Infrastructure.Search;
+using Modules.Catalog.Infrastructure.Storage;
+using Modules.Catalog.Infrastructure.Storage.Factories;
+using Modules.Catalog.Infrastructure.Storage.Options;
+using Modules.Catalog.Infrastructure.Storage.UrlServices;
 using Wolverine;
 using Wolverine.EntityFrameworkCore;
 using Wolverine.Persistence.Durability;
@@ -87,6 +92,35 @@ public static class DependencyInjection
             
             services.AddValidatorsFromAssembly(
                 typeof(CatalogModuleMarker).Assembly);
+            
+            services.Configure<PublicStorageOptions>(
+                configuration.GetSection(
+                    nameof(PublicStorageOptions)));
+            
+            services.Configure<ApiOptions>(
+                configuration.GetSection(
+                    nameof(ApiOptions)));
+
+            services.AddSingleton<S3ClientFactory>();
+            
+            services.AddSingleton<IPublicStorage>(sp =>
+            {
+                var factory = sp.GetRequiredService<S3ClientFactory>();
+                var options = sp.GetRequiredService<IOptions<PublicStorageOptions>>()
+                    .Value;
+                
+                return new PublicStorage(
+                    factory.Create(
+                        options.ServiceUrl,
+                        options.AccessKey,
+                        options.SecretKey),
+                    Options.Create(options));
+            });
+            
+            
+            
+            services.AddScoped<IFileStorageService, FileStorageService>();
+            services.AddScoped<IMediaUrlService, MediaUrlService>();
 
             return services;
         }

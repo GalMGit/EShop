@@ -6,6 +6,9 @@ public sealed class Product
 
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
+    
+    public string? MediaPath { get; set; }
+    public string? ThumbnailPath { get; set; }
 
     public decimal Price { get; set; }
 

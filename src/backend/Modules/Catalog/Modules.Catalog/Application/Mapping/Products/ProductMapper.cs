@@ -1,3 +1,4 @@
+using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
 using Modules.Catalog.Domain;
 using Modules.Catalog.DTOs.Products;
 
@@ -7,12 +8,15 @@ public static class ProductMapper
 {
     public static ProductDetailsResponse ToDetailsDto(
         this Product product,
+        IMediaUrlService mediaUrlService,
         int availableQuantity)
     {
         return new ProductDetailsResponse(
             product.Id,
             product.Name,
             product.Description,
+            mediaUrlService.GetUrl(product.MediaPath),
+            mediaUrlService.GetThumbnailUrl(product.ThumbnailPath),
             product.Price,
             product.CategoryId,
             product.BrandId,

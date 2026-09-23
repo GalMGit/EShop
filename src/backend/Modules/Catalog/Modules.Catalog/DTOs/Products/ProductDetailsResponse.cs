@@ -5,7 +5,6 @@ public sealed record ProductDetailsResponse(
     string Name,
     string Description,
     string? MediaUrl,
-    string? ThumbnailUrl,
     decimal Price,
     Guid CategoryId,
     Guid BrandId,

@@ -16,7 +16,6 @@ public static class ProductMapper
             product.Name,
             product.Description,
             mediaUrlService.GetUrl(product.MediaPath),
-            mediaUrlService.GetThumbnailUrl(product.ThumbnailPath),
             product.Price,
             product.CategoryId,
             product.BrandId,
@@ -28,12 +27,13 @@ public static class ProductMapper
     
     public static ProductListItemResponse ToListItemDto(
         this Product product,
+        IMediaUrlService mediaUrlService,
         int availableQuantity)
     {
         return new ProductListItemResponse(
             product.Id,
             product.Name,
-            null,
+            mediaUrlService.GetThumbnailUrl(product.ThumbnailPath),
             product.Price,
             product.CategoryId,
             product.BrandId,

@@ -2,6 +2,7 @@ using EShop.Contracts.CQ.Inventory.Queries;
 using EShop.Contracts.CQ.Inventory.Responses;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
 using Modules.Catalog.Application.Mapping.Products;
 using Modules.Catalog.DTOs.Products;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
@@ -11,6 +12,7 @@ namespace Modules.Catalog.Features.Products.GetProducts;
 
 public sealed class GetProductsHandler(
     CatalogDbContext context,
+    IMediaUrlService mediaUrlService,
     IMessageBus bus)
 {
     public async Task<Result<List<ProductListItemResponse>>> Handle(
@@ -47,7 +49,9 @@ public sealed class GetProductsHandler(
                     ? stock.AvailableQuantity
                     : 0;
 
-                return product.ToListItemDto(availableQuantity);
+                return product.ToListItemDto(
+                    mediaUrlService,
+                    availableQuantity);
             })
             .ToList();
 

@@ -10,7 +10,7 @@
 
 Приложение построено в стиле **Modular Monolith**.
 
-Все основные бизнес-модули на данный момент работают внутри одного ASP.NET Core процесса, однако каждый модуль владеет собственной базой данных и своей бизнес-логикой.
+Все основные бизнес-модули работают внутри одного ASP.NET Core процесса, однако каждый модуль владеет собственной базой данных и своей бизнес-логикой.
 
 Взаимодействие между модулями происходит через сообщения и события, а не через прямой доступ к базам данных друг друга.
 
@@ -45,10 +45,8 @@
 
                               RabbitMQ
                                  │
-                  ┌──────────────┴──────────────┐
-                  │                             │
-                  ▼                             ▼
-            EmailWorker                   ImageWorker
+                                 ▼
+                            EmailWorker
 ```
 
 Основная цель архитектуры — сохранить чёткие границы между модулями, не усложняя проект полноценной микросервисной инфраструктурой.
@@ -80,11 +78,81 @@ Identity владеет собственной PostgreSQL базой данны�
 * цены;
 * активность товаров;
 * изображения товаров;
+* загрузку изображений;
+* генерацию thumbnails;
 * запросы, связанные с каталогом.
 
 Catalog владеет собственной PostgreSQL базой данных.
 
 Catalog не имеет прямого доступа к базам других модулей.
+
+### Работа с изображениями
+
+На текущем этапе обработка изображений выполняется непосредственно внутри Catalog.
+
+Pipeline выглядит следующим образом:
+
+```text
+Client
+   │
+   ▼
+Create Product
+   │
+   ▼
+Catalog
+   │
+   ├── validate image
+   │
+   ├── detect actual content type
+   │
+   ├── validate file size
+   │
+   ├── upload original → S3 / MinIO
+   │
+   ├── resize image
+   │
+   └── upload thumbnail → S3 / MinIO
+```
+
+Для проверки реального типа файла используется `MimeDetective`.
+
+Для обработки изображений используется `ImageSharp`.
+
+На текущем этапе поддерживаются:
+
+```text
+JPEG
+PNG
+```
+
+Максимальный размер изображения:
+
+```text
+6 MB
+```
+
+Thumbnail генерируется размером:
+
+```text
+200 × 200
+```
+
+и сохраняется в формате JPEG.
+
+В PostgreSQL сохраняются относительные object keys, а не полные URL.
+
+Например:
+
+```text
+products/{productId}/{imageId}.jpg
+products/{productId}/{thumbnailId}_thumb.jpg
+```
+
+Публичный URL формируется через `MediaUrlService`.
+
+Таким образом, Catalog не хранит бинарные данные изображений в PostgreSQL.
+
+В дальнейшем при увеличении нагрузки или усложнении image processing обработка может быть вынесена в отдельный worker без изменения ответственности Catalog за данные изображений.
 
 ---
 
@@ -252,9 +320,7 @@ Application
     │
     └── RabbitMQ
              │
-             ├── EmailWorker
-             │
-             └── ImageWorker
+             └── EmailWorker
 ```
 
 Важно: `PublishAsync()` сам по себе не означает, что сообщение обязательно будет отправлено в RabbitMQ.
@@ -631,69 +697,83 @@ API не выполняет отправку email непосредственн�
 
 ---
 
-# ImageWorker
+# Работа с изображениями
 
-Обработка изображений выполняется асинхронно.
+На текущем этапе отдельный `ImageWorker` не используется.
 
-Планируемый pipeline:
+Изображения обрабатываются непосредственно в `Catalog`.
+
+Основной pipeline:
 
 ```text
 Client
    │
    ▼
-API
+POST /products
    │
    ▼
-S3 / MinIO
-   │
-   │ original image
-   ▼
-ImageUploadedEvent
+Catalog Endpoint
    │
    ▼
-RabbitMQ
+CreateProductCommand
    │
    ▼
-ImageWorker
+CreateProductHandler
    │
-   ├── resize
-   ├── convert
-   ├── optimize
-   └── generate thumbnails
+   ├── validate product data
    │
-   ▼
-S3 / MinIO
+   ├── validate image
    │
-   ├── original
-   ├── large.webp
-   ├── medium.webp
-   └── thumbnail.webp
+   ├── detect actual MIME type
    │
-   ▼
-ImageProcessedEvent
+   ├── upload original → S3 / MinIO
+   │
+   ├── generate thumbnail
+   │
+   └── upload thumbnail → S3 / MinIO
    │
    ▼
-Catalog / Reviews
+ProductImage
 ```
 
-Бинарный файл изображения не передаётся через RabbitMQ.
+Для загрузки используется `multipart/form-data`.
 
-RabbitMQ содержит только metadata, например:
+Изображение передаётся в Catalog как `IFormFile`, после чего преобразуется в application-level `UploadFile`.
+
+Например:
 
 ```csharp
-public sealed record ImageUploadedEvent(
-    Guid ImageId,
-    ImageOwnerType OwnerType,
-    Guid OwnerId,
-    string OriginalKey);
+public sealed class UploadFile : IDisposable
+{
+    public string FileName { get; init; } = null!;
+
+    public string ContentType { get; init; } = null!;
+
+    public long Length { get; init; }
+
+    public Stream Stream { get; init; } = null!;
+}
 ```
 
-Это позволяет использовать один ImageWorker для разных типов изображений:
+Проверка содержимого выполняется независимо от значения HTTP `Content-Type`.
 
-* изображения товаров;
-* изображения отзывов;
-* аватары пользователей;
-* другие изображения.
+Для этого используется `MimeDetective`.
+
+Обработка изображений выполняется через `ImageSharp`.
+
+Текущая реализация генерирует thumbnail размером:
+
+```text
+200 × 200
+```
+
+с JPEG quality:
+
+```text
+45
+```
+
+Исходное изображение и thumbnail сохраняются в S3-compatible object storage.
 
 ---
 
@@ -701,27 +781,34 @@ public sealed record ImageUploadedEvent(
 
 Изображения хранятся в object storage, а не непосредственно в PostgreSQL.
 
+Текущая реализация использует S3-compatible API.
 
 В production можно использовать любой S3-compatible storage.
 
-В базе данных хранятся object keys.
+Для локальной разработки может использоваться MinIO.
+
+В базе данных хранятся относительные object keys.
 
 Например:
 
 ```text
 products/
   {productId}/
-    images/
-      {imageId}/
-        original.jpg
-        large.webp
-        medium.webp
-        thumbnail.webp
+    {imageId}.jpg
+    {thumbnailId}_thumb.jpg
 ```
 
-Вместо полного URL в базе хранится именно key.
+Публичный URL формируется отдельно через `MediaUrlService`.
 
-Это позволяет при необходимости менять CDN или S3 endpoint без миграции данных.
+Таким образом, доменная модель не зависит от конкретного S3 endpoint или CDN.
+
+Основная abstraction:
+
+```csharp
+IPublicStorage
+```
+
+а конкретная реализация работает через AWS S3 SDK.
 
 ---
 
@@ -776,6 +863,7 @@ src/
 │   ├── Catalog/
 │   │   ├── Domain/
 │   │   ├── Features/
+│   │   ├── Application/
 │   │   ├── Infrastructure/
 │   │   └── DependencyInjection.cs
 │   │
@@ -805,9 +893,7 @@ src/
 │
 └── Workers/
     │
-    ├── EmailWorker/
-    │
-    └── ImageWorker/
+    └── EmailWorker/
 ```
 
 ---
@@ -846,12 +932,17 @@ src/
 ## Object Storage
 
 * S3-compatible storage
+* MinIO для локальной разработки
+
+## Image Processing
+
+* ImageSharp
+* MimeDetective
 
 ## Workers
 
 * .NET Worker Services
 * EmailWorker
-* ImageWorker
 
 ## Infrastructure
 
@@ -985,12 +1076,6 @@ dotnet run --project src/EShop.Api
 
 ```bash
 dotnet run --project src/Workers/EmailWorker
-```
-
-Запуск ImageWorker:
-
-```bash
-dotnet run --project src/Workers/ImageWorker
 ```
 
 ---
@@ -1147,18 +1232,6 @@ RabbitMQ
 EmailWorker
 ```
 
-или:
-
-```text
-EShop API
-    │
-    ▼
-RabbitMQ
-    │
-    ▼
-ImageWorker
-```
-
 Это позволяет вынести долгие или ресурсоёмкие операции из HTTP request lifecycle.
 
 ---
@@ -1191,10 +1264,11 @@ Payments   → Payments DB
 ```text
 InventoryReservationFailed
 PaymentFailed
-ImageProcessingFailed
 ```
 
-Временные ошибки могут обрабатываться через retry.
+Для image processing ошибки на текущем этапе обрабатываются непосредственно в Catalog.
+
+Временные инфраструктурные ошибки могут обрабатываться через retry.
 
 Постоянные ошибки должны переводить процесс в соответствующее состояние, а не просто теряться.
 
@@ -1219,20 +1293,20 @@ ImageProcessingFailed
 * compensating commands;
 * явные состояния бизнес-процессов.
 
+Для object storage учитывается отдельная граница согласованности между PostgreSQL и S3-compatible storage: они не участвуют в одной ACID-транзакции.
+
 ---
 
 # Roadmap
 
-* [ ] Завершить ImageWorker
-* [ ] Интегрировать S3
-* [ ] Resize изображений
-* [ ] Конвертация изображений в WebP / AVIF
-* [ ] Генерация thumbnails
-* [ ] Загрузка изображений товаров
-* [ ] Модуль Reviews
-* [ ] Изображения в отзывах
 * [ ] Интеграция с реальным payment provider
 * [ ] Payment webhooks
+* [ ] Улучшить image processing
+* [ ] Поддержка дополнительных форматов изображений
+* [ ] Конвертация изображений в WebP / AVIF
+* [ ] Генерация дополнительных размеров изображений
+* [ ] Модуль Reviews
+* [ ] Изображения в отзывах
 * [ ] Улучшить concurrency control в Inventory
 * [ ] Integration tests для checkout Saga
 * [ ] End-to-end тесты checkout
@@ -1283,3 +1357,7 @@ InventoryReserved ─────► Cancelled
 ```
 
 ---
+
+# License
+
+Проект предназначен для учебных и демонстрационных целей.

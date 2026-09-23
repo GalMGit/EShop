@@ -46,6 +46,17 @@ builder.Host.UseWolverine(opt =>
     opt.AddPaymentMessaging(builder.Configuration);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendClient", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddConfiguration(builder.Configuration);
 
 var app = builder.Build();
@@ -71,6 +82,8 @@ app.MapScalarApiReference("/docs",options =>
             auth.Description = "Bearer Token";
         });
 });
+
+app.UseCors("FrontendClient");
 
 app.UseAuthentication();
 app.UseAuthorization();

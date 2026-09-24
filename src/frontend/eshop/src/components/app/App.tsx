@@ -7,6 +7,7 @@ import {ProductView} from "../products/product-view/ProductView.tsx";
 import {LoginForm} from "../auth/login-rorm/LoginForm.tsx";
 import {AuthLayout} from "../auth/auth-layout/AuthLayout.tsx";
 import {RegisterForm} from "../auth/register-form/RegisterForm.tsx";
+import {CartView} from "../cart/cart-view/CartView.tsx";
 
 export const App = () => {
     return (
@@ -22,6 +23,11 @@ export const App = () => {
                     <Route
                         path="products/:productId"
                         element={<ProductView />}
+                    />
+
+                    <Route
+                        path="cart"
+                        element={<CartView />}
                     />
                 </Route>
 

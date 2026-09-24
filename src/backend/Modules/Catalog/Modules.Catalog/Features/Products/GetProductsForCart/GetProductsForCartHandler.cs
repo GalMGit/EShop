@@ -1,26 +1,25 @@
 using EShop.Contracts.CQ.Catalog;
 using EShop.Contracts.CQ.Catalog.Responses;
-using EShop.Contracts.CQ.Inventory.Responses;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 
-namespace Modules.Catalog.Features.Products.GetProductForCart;
+namespace Modules.Catalog.Features.Products.GetProductsForCart;
 
-public sealed class GetProductForCartHandler(
+public sealed class GetProductsForCartHandler(
     CatalogDbContext context,
     IMediaUrlService mediaUrlService)
 {
-    public async Task<Result<ProductForCartResponse>> Handle(
-        GetProductForCartQuery query,
+    public async Task<List<ProductForCartResponse>> Handle(
+        GetProductsForCartQuery query,
         CancellationToken ct)
     {
-        var product = await context.Products
+        var products = await context.Products
             .AsNoTracking()
-            .Include(x => x.Brand)
-            .Where(x => x.Id == query.Id && x.IsActive)
+            .Where(x => query.ProductIds
+                .Contains(x.Id))
             .Select(x => new ProductForCartResponse(
                 x.Id,
                 mediaUrlService.GetThumbnailUrl(
@@ -28,12 +27,8 @@ public sealed class GetProductForCartHandler(
                 x.Name,
                 x.Price,
                 x.IsActive))
-            .SingleOrDefaultAsync(ct);
-
-        if (product is null)
-            return Result<ProductForCartResponse>.Failure(
-                ProductErrors.NotFound);
+            .ToListAsync(ct);
         
-        return Result<ProductForCartResponse>.Success(product);
+        return products;
     }
 }

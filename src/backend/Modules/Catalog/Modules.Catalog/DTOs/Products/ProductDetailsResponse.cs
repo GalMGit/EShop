@@ -3,6 +3,7 @@ namespace Modules.Catalog.DTOs.Products;
 public sealed record ProductDetailsResponse(
     Guid Id,
     string Name,
+    string Brand,
     string Description,
     string? MediaUrl,
     decimal Price,

@@ -22,7 +22,9 @@ public sealed class GetProductHandler(
     {
         var product = await context.Products
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == query.Id, ct);
+            .Include(x => x.Brand)
+            .FirstOrDefaultAsync(x => 
+                x.Id == query.Id, ct);
 
         if (product is null)
             return Result<ProductDetailsResponse>.Failure(

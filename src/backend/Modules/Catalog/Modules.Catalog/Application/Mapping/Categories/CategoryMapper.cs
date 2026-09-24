@@ -10,7 +10,6 @@ public static class CategoryMapper
     {
         return new CategoryResponse(
             category.Name,
-            category.Id,
-            category.ParentId);
+            category.Id);
     }
 }

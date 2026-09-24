@@ -14,6 +14,7 @@ public static class ProductMapper
         return new ProductDetailsResponse(
             product.Id,
             product.Name,
+            product.Brand.Name,
             product.Description,
             mediaUrlService.GetUrl(product.MediaPath),
             product.Price,
@@ -33,6 +34,7 @@ public static class ProductMapper
         return new ProductListItemResponse(
             product.Id,
             product.Name,
+            product.Brand.Name,
             mediaUrlService.GetThumbnailUrl(product.ThumbnailPath),
             product.Price,
             product.CategoryId,

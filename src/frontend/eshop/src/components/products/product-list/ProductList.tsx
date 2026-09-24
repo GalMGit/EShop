@@ -1,5 +1,6 @@
 import type { ProductListItemResponse } from "../../../models/products/responses/ProductListItemResponse.ts";
 import { ProductCard } from "../product-card/ProductCard.tsx";
+import "./ProductList.css";
 
 interface ProductListProps {
     products: ProductListItemResponse[];

@@ -1,0 +1,156 @@
+.category-view {
+    width: min(1400px, calc(100% - 48px));
+
+    margin: 0 auto;
+
+    padding: 48px 0 80px;
+}
+
+.category-view-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 40px;
+    padding-bottom: 28px;
+
+    border-bottom: 1px solid #27272a;
+}
+
+.category-back-button {
+    display: block;
+
+    margin-bottom: 24px;
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #71717a;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    transition: color 180ms ease;
+}
+
+.category-back-button:hover {
+    color: #f4f4f5;
+}
+
+.category-view-eyebrow {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #71717a;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+}
+
+.category-view-header h1 {
+    margin: 0;
+
+    color: #fafafa;
+
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+
+    letter-spacing: -0.045em;
+    line-height: 1;
+}
+
+.category-view-header p {
+    margin: 14px 0 0;
+
+    color: #71717a;
+
+    font-size: 15px;
+}
+
+.category-view-count {
+    padding: 8px 14px;
+
+    border: 1px solid #27272a;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: #a1a1aa;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* LOADING */
+
+.category-loading {
+    min-height: 240px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #27272a;
+    border-radius: 16px;
+
+    background: #111113;
+
+    color: #71717a;
+
+    font-size: 14px;
+}
+
+/* EMPTY */
+
+.category-empty {
+    min-height: 240px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    border: 1px solid #27272a;
+    border-radius: 16px;
+
+    background: #111113;
+
+    text-align: center;
+}
+
+.category-empty h2 {
+    margin: 0;
+
+    color: #f4f4f5;
+
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.category-empty p {
+    margin: 10px 0 0;
+
+    color: #71717a;
+
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+    .category-view {
+        width: min(100% - 32px, 600px);
+
+        padding: 36px 0 60px;
+    }
+
+    .category-view-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+
+        margin-bottom: 28px;
+    }
+}

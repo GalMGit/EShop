@@ -21,7 +21,8 @@ public sealed class LoginHandler(
             .FirstOrDefaultAsync(x => 
                 x.Email == command.Request.Email, ct);
 
-        if (user is null)
+        if (user is null || !passwordHasher.VerifyHash(
+                command.Request.Password, user.PasswordHash))
             return Result<LoginResponse>.Failure(
                 UserErrors.NotFound);
 

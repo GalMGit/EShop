@@ -3,22 +3,17 @@ namespace Modules.Catalog.Domain;
 public sealed class Product
 {
     public Guid Id { get; set; }
-
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
-    
     public string? MediaPath { get; set; }
     public string? ThumbnailPath { get; set; }
-
     public decimal Price { get; set; }
-
     public Guid CategoryId { get; set; }
+    public Category Category { get; set; } = null!;
     public Guid BrandId { get; set; }
-
+    public Brand Brand { get; set; } = null!;
     public Dictionary<string, object?> Specifications { get; set; } = [];
-
     public bool IsActive { get; set; }
-
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }

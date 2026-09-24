@@ -31,26 +31,23 @@ public sealed class ProductConfig : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder.Property(x => x.UpdatedAt);
-        
+
         builder.Property(x => x.Specifications)
             .HasColumnType("jsonb");
-        
-        builder.HasOne<Category>()
-            .WithMany()
+
+        builder.HasOne(x => x.Category)
+            .WithMany(x => x.Products)
             .HasForeignKey(x => x.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
-        
-        builder.HasOne<Brand>()
-            .WithMany()
+
+        builder.HasOne(x => x.Brand)
+            .WithMany(x => x.Products)
             .HasForeignKey(x => x.BrandId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.HasIndex(x => x.Name);
-
         builder.HasIndex(x => x.CategoryId);
-
         builder.HasIndex(x => x.BrandId);
-
         builder.HasIndex(x => x.IsActive);
     }
 }

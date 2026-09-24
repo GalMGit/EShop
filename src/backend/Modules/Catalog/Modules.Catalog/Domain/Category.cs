@@ -7,4 +7,5 @@ public sealed class Category
     public Guid? ParentId { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
+    public ICollection<Product> Products { get; set; } = [];
 }

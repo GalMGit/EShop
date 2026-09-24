@@ -1,37 +1,43 @@
-import './App.css';
-import { ProductList } from "../products/product-list/ProductList.tsx";
-import { useEffect, useState } from "react";
-import { productService } from "../../services/product-service/productService.ts";
-import type { ProductListItemResponse } from "../../models/products/responses/ProductListItemResponse.ts";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
+import { Layout } from "../layout/Layout.tsx";
+import { CategoryView } from "../categories/category-view/CategoryView.tsx";
+import { Home } from "../home/Home.tsx";
+import {ProductView} from "../products/product-view/ProductView.tsx";
+import {LoginForm} from "../auth/login-rorm/LoginForm.tsx";
+import {AuthLayout} from "../auth/auth-layout/AuthLayout.tsx";
+import {RegisterForm} from "../auth/register-form/RegisterForm.tsx";
 
 export const App = () => {
-  const [products, setProducts] = useState<ProductListItemResponse[]>([]);
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const response = await productService.getAll();
-      setProducts(response.data);
-    };
+                    <Route
+                        path="categories/:categoryId"
+                        element={<CategoryView />}
+                    />
+                    <Route
+                        path="products/:productId"
+                        element={<ProductView />}
+                    />
+                </Route>
 
-    getProducts();
-  }, []);
+                <Route>
+                    <Route path={"/auth"} element={<AuthLayout/>}>
+                        <Route index element={<LoginForm/>}/>
+                        <Route path={"login"} element={<LoginForm/>}/>
+                        <Route path={"register"} element={<RegisterForm/>}/>
+                    </Route>
+                </Route>
 
-  return (
-      <main className="app">
-        <header className="app-header">
-          <div>
-            <span className="eyebrow">CATALOG</span>
-            <h1>Products</h1>
-            <p>Explore our collection</p>
-          </div>
-
-          <div className="product-count">
-            {products.length} products
-          </div>
-        </header>
-
-        <ProductList products={products} />
-      </main>
-  );
+                <Route
+                    path="*"
+                    element={<Navigate to="/" replace />}
+                />
+            </Routes>
+        </Router>
+    );
 };
-

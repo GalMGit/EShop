@@ -12,7 +12,7 @@ public sealed class Endpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("cart", async (
+        app.MapPost("cart/items", async (
                 AddToCartRequest request,
                 IMessageBus bus,
                 ClaimsPrincipal user,

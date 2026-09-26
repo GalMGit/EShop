@@ -1,32 +1,51 @@
 import { useEffect, useState } from "react";
 import "./CartView.css";
-import type {CartResponse} from "../../../models/cart/responses/CartResponse.ts";
-import {cartService} from "../../../services/cart-service/cartService.ts";
+import type { CartResponse } from "../../../models/cart/responses/CartResponse.ts";
+import { cartService } from "../../../services/cart-service/cartService.ts";
+import { orderService } from "../../../services/order-service/orderService.ts";
 
 export const CartView = () => {
     const [cart, setCart] = useState<CartResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [checkingOut, setCheckingOut] = useState(false);
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
+    const loadCart = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const response = await cartService.get();
+
+            setCart(response.data);
+        } catch (error) {
+            console.error(error);
+            setError("Failed to load cart.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const loadCart = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const response = await cartService.get();
-
-                setCart(response.data);
-            } catch (error) {
-                console.error(error);
-                setError("Failed to load cart.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         loadCart();
     }, []);
+
+    const handleCheckout = async () => {
+        try {
+            setCheckingOut(true);
+            setCheckoutError(null);
+
+            await orderService.checkout();
+
+            await loadCart();
+        } catch (error) {
+            console.error(error);
+            setCheckoutError("Failed to checkout.");
+        } finally {
+            setCheckingOut(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -52,12 +71,16 @@ export const CartView = () => {
         return (
             <main className="cart-view">
                 <div className="cart-header">
-                    <span className="cart-label">SHOPPING CART</span>
+                    <span className="cart-label">
+                        SHOPPING CART
+                    </span>
+
                     <h1>Your cart</h1>
                 </div>
 
                 <div className="cart-empty">
                     <h2>Your cart is empty</h2>
+
                     <p>
                         Add some products to your cart to see them here.
                     </p>
@@ -69,7 +92,9 @@ export const CartView = () => {
     return (
         <main className="cart-view">
             <div className="cart-header">
-                <span className="cart-label">SHOPPING CART</span>
+                <span className="cart-label">
+                    SHOPPING CART
+                </span>
 
                 <h1>Your cart</h1>
 
@@ -109,7 +134,10 @@ export const CartView = () => {
 
                             <div className="cart-item-quantity">
                                 <span>Qty</span>
-                                <strong>{item.quantity}</strong>
+
+                                <strong>
+                                    {item.quantity}
+                                </strong>
                             </div>
 
                             <div className="cart-item-total">
@@ -142,11 +170,21 @@ export const CartView = () => {
                         </strong>
                     </div>
 
+                    {checkoutError && (
+                        <div className="cart-checkout-error">
+                            {checkoutError}
+                        </div>
+                    )}
+
                     <button
                         className="cart-checkout-button"
                         type="button"
+                        onClick={handleCheckout}
+                        disabled={checkingOut}
                     >
-                        Checkout
+                        {checkingOut
+                            ? "Processing..."
+                            : "Checkout"}
                     </button>
                 </aside>
             </div>

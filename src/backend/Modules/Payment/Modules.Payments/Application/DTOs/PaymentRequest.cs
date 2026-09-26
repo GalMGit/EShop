@@ -1,4 +1,4 @@
-namespace Modules.Payments.DTOs;
+namespace Modules.Payments.Application.DTOs;
 
 public sealed record PaymentRequest(
     Guid PaymentId,

@@ -1,5 +1,5 @@
+using Modules.Catalog.Application.DTOs.Categories;
 using Modules.Catalog.Domain;
-using Modules.Catalog.DTOs.Categories;
 
 namespace Modules.Catalog.Application.Mapping.Categories;
 

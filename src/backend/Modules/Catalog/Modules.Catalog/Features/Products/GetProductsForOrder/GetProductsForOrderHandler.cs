@@ -2,12 +2,14 @@ using EShop.Contracts.CQ.Catalog;
 using EShop.Contracts.CQ.Catalog.Responses;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 
 namespace Modules.Catalog.Features.Products.GetProductsForOrder;
 
 public sealed class GetProductsForOrderHandler(
-    CatalogDbContext context)
+    CatalogDbContext context,
+    IMediaUrlService mediaUrlService)
 {
     public async Task<
         Result<IReadOnlyCollection<ProductForOrderResponse>>> Handle(
@@ -21,6 +23,8 @@ public sealed class GetProductsForOrderHandler(
             .Select(x => new ProductForOrderResponse(
                 x.Id,
                 x.Name,
+                mediaUrlService.GetThumbnailUrl(
+                    x.ThumbnailPath),
                 x.Price,
                 x.IsActive))
             .ToListAsync(ct);

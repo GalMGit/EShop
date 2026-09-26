@@ -3,7 +3,7 @@ using EShop.Shared.ResultType;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Modules.Catalog.DTOs.Products;
+using Modules.Catalog.Application.DTOs.Products;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Products.GetProducts;

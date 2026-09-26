@@ -1,5 +1,5 @@
 using Modules.Payments.Application.Abstractions;
-using Modules.Payments.DTOs;
+using Modules.Payments.Application.DTOs;
 
 namespace Modules.Payments.Infrastructure.PaymentGateway;
 

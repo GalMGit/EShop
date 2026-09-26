@@ -1,6 +1,6 @@
 using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
+using Modules.Catalog.Application.DTOs.Products;
 using Modules.Catalog.Domain;
-using Modules.Catalog.DTOs.Products;
 
 namespace Modules.Catalog.Application.Mapping.Products;
 

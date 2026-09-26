@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import "./ProductView.css";
-import {productService} from "../../../services/product-service/productService.ts";
-import type {ProductDetailsResponse} from "../../../models/products/responses/ProductDetailsResponse.ts";
+
+import { productService } from "../../../services/product-service/productService.ts";
+import { cartService } from "../../../services/cart-service/cartService.ts";
+
+import type { ProductDetailsResponse } from "../../../models/products/responses/ProductDetailsResponse.ts";
 
 export const ProductView = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
 
-    const [product, setProduct] = useState<ProductDetailsResponse | null>(null);
+    const [product, setProduct] =
+        useState<ProductDetailsResponse | null>(null);
+
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] =
+        useState<string | null>(null);
+
+    const [quantity, setQuantity] = useState(1);
+    const [addingToCart, setAddingToCart] = useState(false);
+    const [cartMessage, setCartMessage] =
+        useState<string | null>(null);
 
     useEffect(() => {
         if (!productId) {
@@ -22,7 +34,8 @@ export const ProductView = () => {
                 setLoading(true);
                 setError(null);
 
-                const response = await productService.getById(productId);
+                const response =
+                    await productService.getById(productId);
 
                 setProduct(response.data);
             } catch (error) {
@@ -35,6 +48,33 @@ export const ProductView = () => {
 
         loadProduct();
     }, [productId]);
+
+    const handleAddToCart = async () => {
+        if (!productId || !product) {
+            return;
+        }
+
+        try {
+            setAddingToCart(true);
+            setCartMessage(null);
+
+            await cartService.addItem(
+                productId,
+                quantity
+            );
+
+            setCartMessage(
+                "Product added to cart."
+            );
+        } catch (error) {
+            console.error(error);
+            setCartMessage(
+                "Failed to add product to cart."
+            );
+        } finally {
+            setAddingToCart(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -50,9 +90,13 @@ export const ProductView = () => {
         return (
             <main className="product-view">
                 <div className="product-view-status">
-                    <p>{error ?? "Product not found"}</p>
+                    <p>
+                        {error ?? "Product not found"}
+                    </p>
 
-                    <button onClick={() => navigate(-1)}>
+                    <button
+                        onClick={() => navigate(-1)}
+                    >
                         Go back
                     </button>
                 </div>
@@ -87,6 +131,7 @@ export const ProductView = () => {
                     <span className="product-details-label">
                         PRODUCT
                     </span>
+
                     <h4 className="product-details-stock">
                         {product.brand}
                     </h4>
@@ -107,20 +152,100 @@ export const ProductView = () => {
                             : "Out of stock"}
                     </div>
 
-                    {Object.keys(product.specifications).length > 0 && (
+                    {product.availableQuantity > 0 && (
+                        <>
+                            <div className="product-purchase">
+                                <div className="product-quantity">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setQuantity(
+                                                (current) =>
+                                                    Math.max(
+                                                        1,
+                                                        current - 1
+                                                    )
+                                            )
+                                        }
+                                        disabled={addingToCart}
+                                    >
+                                        −
+                                    </button>
+
+                                    <span>
+                                        {quantity}
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setQuantity(
+                                                (current) =>
+                                                    Math.min(
+                                                        product.availableQuantity,
+                                                        current + 1
+                                                    )
+                                            )
+                                        }
+                                        disabled={
+                                            addingToCart ||
+                                            quantity >=
+                                            product.availableQuantity
+                                        }
+                                    >
+                                        +
+                                    </button>
+                                </div>
+
+                                <button
+                                    className="add-to-cart-button"
+                                    type="button"
+                                    onClick={
+                                        handleAddToCart
+                                    }
+                                    disabled={
+                                        addingToCart
+                                    }
+                                >
+                                    {addingToCart
+                                        ? "Adding..."
+                                        : "Add to cart"}
+                                </button>
+                            </div>
+
+                            {cartMessage && (
+                                <div className="cart-message">
+                                    {cartMessage}
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {Object.keys(
+                        product.specifications
+                    ).length > 0 && (
                         <div className="product-specifications">
-                            <h2>Specifications</h2>
+                            <h2>
+                                Specifications
+                            </h2>
 
                             <div className="specifications-list">
-                                {Object.entries(product.specifications).map(
+                                {Object.entries(
+                                    product.specifications
+                                ).map(
                                     ([key, value]) => (
                                         <div
                                             className="specification-row"
                                             key={key}
                                         >
-                                            <span>{key}</span>
+                                            <span>
+                                                {key}
+                                            </span>
+
                                             <strong>
-                                                {String(value)}
+                                                {String(
+                                                    value
+                                                )}
                                             </strong>
                                         </div>
                                     )

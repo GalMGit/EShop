@@ -34,6 +34,13 @@ export const Layout = () => {
                                 </button>
 
                                 <button
+                                    className="nav-item"
+                                    onClick={() => navigate("/orders")}
+                                >
+                                    Заказы
+                                </button>
+
+                                <button
                                     className="nav-item nav-item-danger"
                                     onClick={() => {
                                         localStorage.removeItem("token");

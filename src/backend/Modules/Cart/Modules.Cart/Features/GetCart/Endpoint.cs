@@ -5,7 +5,7 @@ using EShop.Shared.ResultType;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Modules.Cart.DTOs;
+using Modules.Cart.Application.DTOs;
 using Wolverine;
 
 namespace Modules.Cart.Features.GetCart;

@@ -1,7 +1,7 @@
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
+using Modules.Orders.Application.DTOs;
 using Modules.Orders.Application.Mapping;
-using Modules.Orders.DTOs;
 using Modules.Orders.Infrastructure.Persistence.Database.Context;
 
 namespace Modules.Orders.Features.GetOrders;

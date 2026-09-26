@@ -1,6 +1,4 @@
-using Modules.Orders.Domain;
-
-namespace Modules.Orders.DTOs;
+namespace Modules.Orders.Application.DTOs;
 
 public sealed record OrderWithItemsResponse(
     Guid Id,

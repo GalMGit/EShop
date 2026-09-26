@@ -5,7 +5,7 @@ using EShop.Shared.ResultType;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Modules.Orders.DTOs;
+using Modules.Orders.Application.DTOs;
 using Wolverine;
 
 namespace Modules.Orders.Features.GetOrder;

@@ -1,7 +1,7 @@
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Application.DTOs.Categories;
 using Modules.Catalog.Application.Mapping.Categories;
-using Modules.Catalog.DTOs.Categories;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 

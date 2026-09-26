@@ -3,8 +3,8 @@ using EShop.Contracts.CQ.Inventory.Responses;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
 using Modules.Catalog.Application.Abstractions.IServices.IMediaServices;
+using Modules.Catalog.Application.DTOs.Products;
 using Modules.Catalog.Application.Mapping.Products;
-using Modules.Catalog.DTOs.Products;
 using Modules.Catalog.Infrastructure.Persistence.Database.Context;
 using Wolverine;
 

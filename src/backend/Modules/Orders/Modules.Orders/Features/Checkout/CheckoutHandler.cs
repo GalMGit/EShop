@@ -4,8 +4,8 @@ using EShop.Contracts.CQ.Catalog;
 using EShop.Contracts.CQ.Catalog.Responses;
 using EShop.Contracts.CQ.Orders.Events;
 using EShop.Shared.ResultType;
+using Modules.Orders.Application.DTOs;
 using Modules.Orders.Domain;
-using Modules.Orders.DTOs;
 using Modules.Orders.Errors;
 using Modules.Orders.Infrastructure.Persistence.Database.Context;
 using Wolverine;
@@ -84,7 +84,8 @@ public sealed class CheckoutHandler(
                 ProductId = product.ProductId,
                 Quantity = cartItem.Quantity,
                 ProductName = product.Name,
-                UnitPrice = product.Price
+                UnitPrice = product.Price,
+                ProductImageUrl = product.ImageUrl
             });
         }
         

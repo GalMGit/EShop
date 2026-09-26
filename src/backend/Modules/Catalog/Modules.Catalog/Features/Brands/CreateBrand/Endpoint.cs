@@ -5,7 +5,7 @@ using EShop.Shared.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Modules.Catalog.DTOs.Brands;
+using Modules.Catalog.Application.DTOs.Brands;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Brands.CreateBrand;

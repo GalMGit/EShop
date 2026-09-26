@@ -3,7 +3,7 @@ using EShop.Shared.ResultType;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Modules.Catalog.DTOs.Categories;
+using Modules.Catalog.Application.DTOs.Categories;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Categories.GetCategories;

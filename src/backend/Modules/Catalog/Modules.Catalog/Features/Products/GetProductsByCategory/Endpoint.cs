@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Modules.Catalog.DTOs.Products;
+using Modules.Catalog.Application.DTOs.Products;
 using Wolverine;
 
 namespace Modules.Catalog.Features.Products.GetProductsByCategory;

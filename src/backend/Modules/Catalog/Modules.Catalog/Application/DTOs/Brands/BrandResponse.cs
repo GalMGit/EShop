@@ -1,4 +1,4 @@
-namespace Modules.Catalog.DTOs.Brands;
+namespace Modules.Catalog.Application.DTOs.Brands;
 
 public sealed record BrandResponse(
     Guid Id, 

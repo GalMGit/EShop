@@ -1,4 +1,4 @@
-using Modules.Payments.DTOs;
+using Modules.Payments.Application.DTOs;
 
 namespace Modules.Payments.Application.Abstractions;
 

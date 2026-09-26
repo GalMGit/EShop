@@ -1,4 +1,4 @@
-namespace Modules.Catalog.DTOs.Products;
+namespace Modules.Catalog.Application.DTOs.Products;
 
 public sealed record ProductDetailsResponse(
     Guid Id,

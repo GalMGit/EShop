@@ -1,7 +1,7 @@
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using EShop.Shared.ResultType;
-using Modules.Catalog.DTOs.Products;
+using Modules.Catalog.Application.DTOs.Products;
 using Modules.Catalog.Errors;
 using Modules.Catalog.Infrastructure.Search;
 

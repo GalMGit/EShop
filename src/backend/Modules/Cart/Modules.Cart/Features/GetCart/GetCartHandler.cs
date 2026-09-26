@@ -2,7 +2,7 @@ using EShop.Contracts.CQ.Catalog;
 using EShop.Contracts.CQ.Catalog.Responses;
 using EShop.Shared.ResultType;
 using Microsoft.EntityFrameworkCore;
-using Modules.Cart.DTOs;
+using Modules.Cart.Application.DTOs;
 using Modules.Cart.Errors;
 using Modules.Cart.Infrastructure.Persistence.Database.Context;
 using Wolverine;

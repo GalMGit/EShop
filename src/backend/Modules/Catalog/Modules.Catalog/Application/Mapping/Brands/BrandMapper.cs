@@ -1,5 +1,5 @@
+using Modules.Catalog.Application.DTOs.Brands;
 using Modules.Catalog.Domain;
-using Modules.Catalog.DTOs.Brands;
 
 namespace Modules.Catalog.Application.Mapping.Brands;
 

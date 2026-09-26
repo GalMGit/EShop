@@ -1,4 +1,4 @@
-namespace Modules.Catalog.DTOs.Categories;
+namespace Modules.Catalog.Application.DTOs.Categories;
 
 public sealed record CategoryResponse(
     string Name, 

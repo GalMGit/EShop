@@ -1,4 +1,4 @@
-namespace Modules.Cart.DTOs;
+namespace Modules.Cart.Application.DTOs;
 
 public sealed record CartItemResponse(
     Guid Id,

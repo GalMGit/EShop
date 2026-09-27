@@ -1,15 +1,36 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./CartView.css";
 import type { CartResponse } from "../../../models/cart/responses/CartResponse.ts";
+import type { ApiErrorResponse } from "../../../models/common/ApiErrorResponse.ts";
 import { cartService } from "../../../services/cart-service/cartService.ts";
 import { orderService } from "../../../services/order-service/orderService.ts";
 
+const getCheckoutErrorMessage = (
+    code?: string
+): string => {
+    switch (code) {
+        case "orders.empty_cart":
+            return "Your cart is empty.";
+
+        case "orders.product_unavailable":
+            return "Some products in your cart are no longer available or there is not enough stock.";
+
+        default:
+            return "Failed to complete checkout. Please try again.";
+    }
+};
+
 export const CartView = () => {
+    const navigate = useNavigate();
+
     const [cart, setCart] = useState<CartResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [checkingOut, setCheckingOut] = useState(false);
-    const [checkoutError, setCheckoutError] = useState<string | null>(null);
+    const [checkoutError, setCheckoutError] =
+        useState<string | null>(null);
 
     const loadCart = async () => {
         try {
@@ -36,12 +57,25 @@ export const CartView = () => {
             setCheckingOut(true);
             setCheckoutError(null);
 
-            await orderService.checkout();
+            const response = await orderService.checkout();
 
-            await loadCart();
+            const orderId = response.data.orderId;
+
+            navigate(`/orders/${orderId}`);
         } catch (error) {
-            console.error(error);
-            setCheckoutError("Failed to checkout.");
+            console.error("CHECKOUT ERROR:", error);
+
+            if (axios.isAxiosError<ApiErrorResponse>(error)) {
+                setCheckoutError(
+                    getCheckoutErrorMessage(
+                        error.response?.data?.code
+                    )
+                );
+            } else {
+                setCheckoutError(
+                    "Failed to complete checkout. Please try again."
+                );
+            }
         } finally {
             setCheckingOut(false);
         }
@@ -100,7 +134,9 @@ export const CartView = () => {
 
                 <p>
                     {cart.items.length}{" "}
-                    {cart.items.length === 1 ? "item" : "items"}
+                    {cart.items.length === 1
+                        ? "item"
+                        : "items"}
                 </p>
             </div>
 

@@ -12,7 +12,8 @@ public static class OrderMapper
             order.Id,
             order.TotalAmount,
             order.Status.ToString(),
-            order.CreatedAt
+            order.CreatedAt,
+            order.CancellationReason
         );
     }
 
@@ -24,6 +25,7 @@ public static class OrderMapper
             order.TotalAmount,
             order.Status.ToString(),
             order.CreatedAt,
+            order.CancellationReason,
             order.Items
                 .Select(x => 
                     x.ToOrderItemResponse())

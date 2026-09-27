@@ -5,4 +5,5 @@ public sealed record OrderWithItemsResponse(
     decimal TotalAmount,
     string Status,
     DateTime CreatedAt,
+    string? CancellationReason,
     List<OrderItemResponse> Items);

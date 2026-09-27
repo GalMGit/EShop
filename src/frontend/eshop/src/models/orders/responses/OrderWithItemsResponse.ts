@@ -5,5 +5,6 @@ export type OrderWithItemsResponse = {
     totalAmount: number;
     status: string;
     createdAt: string;
+    cancellationReason?: string;
     items: OrderItemResponse[];
 };

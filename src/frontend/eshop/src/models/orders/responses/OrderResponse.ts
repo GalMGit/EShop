@@ -3,4 +3,5 @@ export type OrderResponse = {
     totalAmount: number;
     status: string;
     createdAt: string;
+    cancellationReason?: string;
 };

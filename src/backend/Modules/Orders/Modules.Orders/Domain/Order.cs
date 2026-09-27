@@ -7,6 +7,7 @@ public sealed class Order
     public decimal TotalAmount { get; set; }
     public OrderStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? CancellationReason { get; set; }
 
-    public ICollection<OrderItem> Items { get; private set; } = [];
+    public ICollection<OrderItem> Items { get; set; } = [];
 }

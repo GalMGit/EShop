@@ -218,6 +218,29 @@
     letter-spacing: 0.14em;
 }
 
+.order-cancelled-message {
+    margin-bottom: 24px;
+    padding: 16px 18px;
+    border: 1px solid #3a2929;
+    border-radius: 10px;
+    background: #171111;
+}
+
+.order-cancelled-message strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #d4a5a5;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.order-cancelled-message p {
+    margin: 0;
+    color: #9b8585;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 .order-view-summary-row,
 .order-view-summary-total {
     display: flex;

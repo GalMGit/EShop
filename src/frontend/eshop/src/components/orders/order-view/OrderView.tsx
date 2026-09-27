@@ -78,6 +78,9 @@ export const OrderView = () => {
         year: "numeric",
     });
 
+    const isCancelled =
+        order.status.toLowerCase() === "cancelled";
+
     return (
         <main className="order-view">
             <button
@@ -109,6 +112,19 @@ export const OrderView = () => {
                     {order.status}
                 </span>
             </header>
+
+            {isCancelled && (
+                <div className="order-cancelled-message">
+                    <strong>
+                        Order cancelled
+                    </strong>
+
+                    <p>
+                        {order.cancellationReason ??
+                            "This order was cancelled because some products are no longer available."}
+                    </p>
+                </div>
+            )}
 
             <section className="order-view-items">
                 <div className="order-view-section-header">

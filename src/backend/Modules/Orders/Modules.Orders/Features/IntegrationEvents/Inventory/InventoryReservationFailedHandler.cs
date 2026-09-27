@@ -1,14 +1,17 @@
+using EShop.Contracts.CQ.Cart.Commands;
 using EShop.Contracts.Events.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Modules.Orders.Domain;
 using Modules.Orders.Infrastructure.Persistence.Database.Context;
+using Wolverine;
 using Wolverine.Attributes;
 
 namespace Modules.Orders.Features.IntegrationEvents.Inventory;
 
 [Transactional(typeof(OrderDbContext))]
 public sealed class InventoryReservationFailedHandler(
-    OrderDbContext context)
+    OrderDbContext context,
+    IMessageBus bus)
 {
     public async Task Handle(
         InventoryReservationFailedEvent @event,
@@ -25,5 +28,10 @@ public sealed class InventoryReservationFailedHandler(
              return;
 
          order.Status = OrderStatus.Cancelled;
+         order.CancellationReason = @event.Reason;
+
+         await bus.SendAsync(
+             new ClearCartCommand(
+                order.UserId));
     }
 }

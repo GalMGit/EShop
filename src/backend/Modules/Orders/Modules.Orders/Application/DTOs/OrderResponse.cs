@@ -4,4 +4,5 @@ public sealed record OrderResponse(
     Guid Id,
     decimal TotalAmount,
     string Status,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    string? CancellationReason);

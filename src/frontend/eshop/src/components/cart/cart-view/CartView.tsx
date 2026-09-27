@@ -28,8 +28,12 @@ export const CartView = () => {
     const [cart, setCart] = useState<CartResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
     const [checkingOut, setCheckingOut] = useState(false);
     const [checkoutError, setCheckoutError] =
+        useState<string | null>(null);
+
+    const [removingItemId, setRemovingItemId] =
         useState<string | null>(null);
 
     const loadCart = async () => {
@@ -51,6 +55,23 @@ export const CartView = () => {
     useEffect(() => {
         loadCart();
     }, []);
+
+    const handleRemoveItem = async (itemId: string) => {
+        try {
+            setRemovingItemId(itemId);
+
+            const response =
+                await cartService.removeItem(itemId);
+
+            setCart(response.data);
+        } catch (error) {
+            console.error("REMOVE CART ITEM ERROR:", error);
+
+            setError("Failed to remove item from cart.");
+        } finally {
+            setRemovingItemId(null);
+        }
+    };
 
     const handleCheckout = async () => {
         try {
@@ -116,7 +137,8 @@ export const CartView = () => {
                     <h2>Your cart is empty</h2>
 
                     <p>
-                        Add some products to your cart to see them here.
+                        Add some products to your cart to see
+                        them here.
                     </p>
                 </div>
             </main>
@@ -142,45 +164,65 @@ export const CartView = () => {
 
             <div className="cart-content">
                 <section className="cart-items">
-                    {cart.items.map((item) => (
-                        <article
-                            className="cart-item"
-                            key={item.id}
-                        >
-                            <div className="cart-item-image">
-                                {item.thumbnailUrl ? (
-                                    <img
-                                        src={item.thumbnailUrl}
-                                        alt={item.productName}
-                                    />
-                                ) : (
-                                    <div className="cart-item-placeholder">
-                                        No image
-                                    </div>
-                                )}
-                            </div>
+                    {cart.items.map((item) => {
+                        const isRemoving =
+                            removingItemId === item.id;
 
-                            <div className="cart-item-info">
-                                <h2>{item.productName}</h2>
+                        return (
+                            <article
+                                className="cart-item"
+                                key={item.id}
+                            >
+                                <div className="cart-item-image">
+                                    {item.thumbnailUrl ? (
+                                        <img
+                                            src={item.thumbnailUrl}
+                                            alt={item.productName}
+                                        />
+                                    ) : (
+                                        <div className="cart-item-placeholder">
+                                            No image
+                                        </div>
+                                    )}
+                                </div>
 
-                                <span className="cart-item-price">
-                                    {item.unitPrice.toFixed(2)}Р
-                                </span>
-                            </div>
+                                <div className="cart-item-info">
+                                    <h2>
+                                        {item.productName}
+                                    </h2>
 
-                            <div className="cart-item-quantity">
-                                <span>Qty</span>
+                                    <span className="cart-item-price">
+                                        {item.unitPrice.toFixed(2)}Р
+                                    </span>
+                                </div>
 
-                                <strong>
-                                    {item.quantity}
-                                </strong>
-                            </div>
+                                <div className="cart-item-quantity">
+                                    <span>Qty</span>
 
-                            <div className="cart-item-total">
-                                {item.totalPrice.toFixed(2)}Р
-                            </div>
-                        </article>
-                    ))}
+                                    <strong>
+                                        {item.quantity}
+                                    </strong>
+                                </div>
+
+                                <div className="cart-item-total">
+                                    {item.totalPrice.toFixed(2)}Р
+                                </div>
+
+                                <button
+                                    className="cart-item-remove"
+                                    type="button"
+                                    onClick={() =>
+                                        handleRemoveItem(item.id)
+                                    }
+                                    disabled={isRemoving}
+                                >
+                                    {isRemoving
+                                        ? "Removing..."
+                                        : "Remove"}
+                                </button>
+                            </article>
+                        );
+                    })}
                 </section>
 
                 <aside className="cart-summary">

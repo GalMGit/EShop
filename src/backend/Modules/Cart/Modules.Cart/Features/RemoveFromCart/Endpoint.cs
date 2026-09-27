@@ -12,15 +12,15 @@ public sealed class Endpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("cart/items/{productId:guid}", async (
-                Guid productId,
+        app.MapDelete("cart/items/{cartItem:guid}", async (
+                Guid cartItem,
                 ClaimsPrincipal user,
                 IMessageBus bus,
                 CancellationToken ct) =>
             {
                 var result = await bus.InvokeAsync<Result>(
                     new RemoveFromCartCommand(
-                        productId, 
+                        cartItem, 
                         user.GetUserId()), ct);
 
                 return result.ToHttpResponse();

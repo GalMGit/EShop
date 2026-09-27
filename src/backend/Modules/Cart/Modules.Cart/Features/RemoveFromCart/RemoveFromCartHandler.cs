@@ -23,7 +23,7 @@ public sealed class RemoveFromCartHandler(
         var cartItem = await context.CartItems
             .SingleOrDefaultAsync(x => 
                 x.CartId == cart.Id && 
-                x.ProductId == command.ProductId, ct);
+                x.Id == command.ItemId, ct);
 
         if (cartItem is null)
             return Result.Failure(

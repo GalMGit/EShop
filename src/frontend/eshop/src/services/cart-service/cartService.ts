@@ -10,4 +10,9 @@ export const cartService = {
             productId,
             quantity,
         }),
+
+    removeItem: (itemId: string) =>
+        apiService.delete<CartResponse>(
+            `cart/items/${itemId}`
+        ),
 };
